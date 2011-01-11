@@ -39,7 +39,7 @@ function setPS1
   if [ -z "${PS1_NO_TITLEBAR}" ]; then
     case $TERM in
       xterm*|rxvt*)
-        local PS1_TITLEBAR="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:\w\a\]"
+        local PS1_TITLEBAR="\[\e]0;${debian_chroot:+($debian_chroot)}\u@${HOST}:\w\a\]"
         ;;
       *)
         local PS1_TITLEBAR=''
