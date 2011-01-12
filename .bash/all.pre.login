@@ -94,22 +94,22 @@ fi
 # Load custom functions
 [[ -r ${HOME}/.bash/functions ]] && source ${HOME}/.bash/functions
 if [ "$color_prompt" = yes ]; then
-    user_color=$COLOR_GREEN
+    USER_COLOR=$COLOR_GREEN
     dir_color=$COLOR_BLUE
     COLOR_OFF=$COLOR_NONE
     COLOR_SCM_BRANCH=$COLOR_RED
     COLOR_SCM_STATE=$COLOR_LIGHT_RED
 elif [ "$color_prompt" = full ]; then
-    user_color=`extColor 22`
+    USER_COLOR=`extColor 22`
     dir_color=`extColor 19`
     COLOR_SCM_BRANCH=`extColor 172`
     COLOR_SCM_STATE=`extColor 160`
     COLOR_OFF=$COLOR_NONE
 fi
 
-PROMPT="${debian_chroot:+($debian_chroot)}[${user_color}\u@${HOST}${COLOR_OFF}]:${dir_color}\W${COLOR_OFF} \$(hg_in_repo)${COLOR_SCM_BRANCH}\$(hg_branch)${COLOR_OFF}${COLOR_SCM_STATE}\$(hg_status)${COLOR_OFF}\$(prompt_char)"
+PROMPT="${debian_chroot:+($debian_chroot)}[${USER_COLOR}\u@${HOST}${COLOR_OFF}]:${dir_color}\W${COLOR_OFF} \$(hg_in_repo)${COLOR_SCM_BRANCH}\$(hg_branch)${COLOR_OFF}${COLOR_SCM_STATE}\$(hg_status)${COLOR_OFF}\$(prompt_char)"
 
-unset color_prompt force_color_prompt user_color dir_color 
+unset color_prompt force_color_prompt USER_COLOR dir_color 
 
 
 PS2="moar!> "
