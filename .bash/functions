@@ -153,7 +153,8 @@ function extColor() { echo -n "\[\033[38;5;$1m\]"; }
 function prompt_char() {
     git branch >/dev/null 2>/dev/null && echo '±' && return
     hg root >/dev/null 2>/dev/null && echo '☿' && return
-    echo '#'
+    svn info >/dev/null 2>/dev/null && echo '∫' && return
+    echo '$'
 }
 
 # http://stevelosh.com/blog/2009/03/mercurial-bash-prompts/
