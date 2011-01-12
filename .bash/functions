@@ -146,7 +146,7 @@ function toUpper() {
 #}
 
 
-function extColor() { echo -ne "\[\033[38;5;$1m\]"; }
+function extColor() { echo -n "\[\033[38;5;$1m\]"; }
 
 
 # from http://stevelosh.com/blog/2010/02/my-extravagant-zsh-prompt/
