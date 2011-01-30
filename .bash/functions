@@ -25,6 +25,8 @@ function _shortpath
 # Callback function to set the command prompt PS1
 function setPS1
 {
+  RET=$?
+
   [ -z "${PROMPT}" ] && PROMPT="\x\\$"
 
   PS1="${PS1COLOR}${PROMPT}\[\033[0m\] "
@@ -151,6 +153,8 @@ function extColor() { echo -n "\[\033[38;5;$1m\]"; }
 
 # from http://stevelosh.com/blog/2010/02/my-extravagant-zsh-prompt/
 function prompt_char() {
+    #if [[ $RET -eq 0 ]]; then COMMAND_STATUS_COLOR="${COLOR_RED}"; else COMMAND_STATUS_COLOR="${COLOR_GREEN}"; fi
+    #echo -ne "$COMMAND_STATUS_COLOR"
     git branch >/dev/null 2>/dev/null && echo '±' && return
     hg root >/dev/null 2>/dev/null && echo '☿' && return
     echo '#'
