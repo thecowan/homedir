@@ -157,13 +157,15 @@ function prompt_char() {
     #echo -ne "$COMMAND_STATUS_COLOR"
     git branch >/dev/null 2>/dev/null && echo '±' && return
     hg root >/dev/null 2>/dev/null && echo '☿' && return
-    echo '#'
+    svn info >/dev/null 2>/dev/null && echo '∫' && return
+    echo '$'
 }
 
 # http://stevelosh.com/blog/2009/03/mercurial-bash-prompts/
 
-hg_in_repo() {
-	[[ `hg branch 2> /dev/null` ]] && echo 'on '
+in_repo() {
+	[[ `hg branch 2> /dev/null` ]] && echo 'on ' && return
+	[[ `git symbolic-ref HEAD 2> /dev/null` ]] && echo 'on ' && return
 }
 
 hg_branch() {
@@ -172,4 +174,9 @@ hg_branch() {
 
 hg_status() {
 	hg status 2> /dev/null | awk '$1 == "?" { print "?"; print " " } $1 != "?" { print "!"; print " " }'  | sort | uniq | tr -d '\n'
+}
+
+function git_branch() {
+      ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+      echo ${ref#refs/heads/}
 }

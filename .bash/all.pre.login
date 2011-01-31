@@ -113,7 +113,7 @@ elif [ "$color_prompt" = full ]; then
     COLOR_OFF=$COLOR_NONE
 fi
 
-PROMPT="${debian_chroot:+($debian_chroot)}[${USER_COLOR}\u@${HOST}${COLOR_OFF}]:${dir_color}\W${COLOR_OFF} \$(hg_in_repo)${COLOR_SCM_BRANCH}\$(hg_branch)${COLOR_OFF}${COLOR_SCM_STATE}\$(hg_status)${COLOR_OFF}\$(prompt_char)"
+PROMPT="${debian_chroot:+($debian_chroot)}[${USER_COLOR}\u@${HOST}${COLOR_OFF}]:${dir_color}\W${COLOR_OFF} \$(in_repo)${COLOR_SCM_BRANCH}\$(hg_branch)\$(git_branch)${COLOR_OFF}${COLOR_SCM_STATE}\$(hg_status)${COLOR_OFF}\$(prompt_char)"
 
 unset color_prompt force_color_prompt USER_COLOR dir_color 
 
