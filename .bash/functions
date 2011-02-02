@@ -167,6 +167,7 @@ function prompt_char() {
 in_repo() {
 	[[ `hg branch 2> /dev/null` ]] && echo 'on ' && return
 	[[ `git symbolic-ref HEAD 2> /dev/null` ]] && echo 'on ' && return
+	[[ `p4_client_name 2> /dev/null` ]] && echo 'on ' && return
 }
 
 hg_branch() {
