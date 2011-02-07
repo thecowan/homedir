@@ -101,21 +101,26 @@ fi
 [[ -r ${HOME}/.bash/functions ]] && source ${HOME}/.bash/functions
 if [ "$color_prompt" = yes ]; then
     USER_COLOR=$COLOR_GREEN
-    dir_color=$COLOR_BLUE
+    DIR_COLOR=$COLOR_BLUE
     COLOR_OFF=$COLOR_NONE
     COLOR_SCM_BRANCH=$COLOR_RED
     COLOR_SCM_STATE=$COLOR_LIGHT_RED
+    COLOR_PROMPT_OK=$COLOR_WHITE
+    COLOR_PROMPT_ERROR=$COLOR_RED
 elif [ "$color_prompt" = full ]; then
     USER_COLOR=`extColor 22`
-    dir_color=`extColor 19`
+    DIR_COLOR=`extColor 19`
     COLOR_SCM_BRANCH=`extColor 172`
     COLOR_SCM_STATE=`extColor 160`
     COLOR_OFF=$COLOR_NONE
+    COLOR_PROMPT_OK=`extColor 100`
+    COLOR_PROMPT_ERROR=`extColor 75`
+    PROMPT_COLOR=`extColor 100`
 fi
 
-PROMPT="${debian_chroot:+($debian_chroot)}[${USER_COLOR}\u@${HOST}${COLOR_OFF}]:${dir_color}\W${COLOR_OFF} \$(in_repo)${COLOR_SCM_BRANCH}\$(hg_branch)\$(git_branch)\$(p4_client_name)${COLOR_OFF}${COLOR_SCM_STATE}\$(hg_status)${COLOR_OFF}\$(prompt_char)"
+PROMPT="${USER_COLOR}\u@${HOST}${COLOR_OFF}:${DIR_COLOR}\w${COLOR_OFF} \$(in_repo)${COLOR_SCM_BRANCH}\$(hg_branch)\$(git_branch)\$(p4_client_name)${COLOR_OFF}${COLOR_SCM_STATE}\$(hg_status)${COLOR_OFF}\n${PROMPT_COLOR}[\!] \$(prompt_char)${COLOR_OFF}"
 
-unset color_prompt force_color_prompt USER_COLOR dir_color 
+unset color_prompt force_color_prompt USER_COLOR DIR_COLOR 
 
 
 PS2="moar!> "

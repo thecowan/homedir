@@ -26,6 +26,11 @@ function _shortpath
 function setPS1
 {
   RET=$?
+  #if [[ $RET -eq 0 ]]; then 
+  #  PROMPT_COLOR=${COLOR_PROMPT_OK}
+  #else
+  #  PROMPT_COLOR=${COLOR_PROMPT_ERROR}
+  #fi
 
   [ -z "${PROMPT}" ] && PROMPT="\x\\$"
 
@@ -153,7 +158,6 @@ function extColor() { echo -n "\[\033[38;5;$1m\]"; }
 
 # from http://stevelosh.com/blog/2010/02/my-extravagant-zsh-prompt/
 function prompt_char() {
-    #if [[ $RET -eq 0 ]]; then COMMAND_STATUS_COLOR="${COLOR_RED}"; else COMMAND_STATUS_COLOR="${COLOR_GREEN}"; fi
     #echo -ne "$COMMAND_STATUS_COLOR"
     git branch >/dev/null 2>/dev/null && echo '±' && return
     hg root >/dev/null 2>/dev/null && echo '☿' && return
