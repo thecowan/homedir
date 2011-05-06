@@ -198,7 +198,7 @@ p4_client_name() {
   else
     dir=$(g3_name)/..
   fi
-  local name=$(grep ^P4CLIENT $dir/.p4config 2>/dev/null | cut -d= -f2 | sed -e "s/^$USER-//" | tail -1)
+  local name=$(grep ^P4CLIENT "$dir/.p4config" 2>/dev/null | cut -d= -f2 | sed -e "s/^$USER-//" | tail -1)
   if [ "$name" == "" ]; then
     echo -n $2
     return 1
