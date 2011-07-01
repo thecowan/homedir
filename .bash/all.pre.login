@@ -129,3 +129,9 @@ PS2="moar!> "
 export M2_HOME=/usr/local/maven
 addToPath ${M2_HOME}/bin
 
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ......="cd ../../../../.."
+alias .......="cd ../../../../../.."
