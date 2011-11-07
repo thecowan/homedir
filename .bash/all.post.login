@@ -6,6 +6,7 @@ PROMPT_COMMAND='setPS1'
 
 addToPath $HOME/bin
 addToPathVar CDPATH ~
+addToPathVar CDPATH .
 export EDITOR=vim
 export VISUAL=${EDITOR}
 export PAGER="less"
