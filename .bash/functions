@@ -171,7 +171,7 @@ function prompt_char() {
 in_repo() {
 	[[ `hg branch 2> /dev/null` ]] && echo 'on ' && return
 	[[ `git symbolic-ref HEAD 2> /dev/null` ]] && echo 'on ' && return
-	[[ `p4_client_name 2> /dev/null` ]] && echo 'on ' && return
+	[[ `p4_client_name 2> /dev/null` ]] && echo 'on ' && return 
 }
 
 hg_branch() {
@@ -198,12 +198,22 @@ p4_client_name() {
   else
     dir=$(g3_name)/..
   fi
-  local name=$(grep ^P4CLIENT $dir/.p4config 2>/dev/null | cut -d= -f2 | sed -e "s/^$USER-//" | tail -1)
+  local name=$(grep ^P4CLIENT "$dir/.p4config" 2>/dev/null | cut -d= -f2 | sed -e "s/^$USER-//" | tail -1)
   if [ "$name" == "" ]; then
     echo -n $2
     return 1
   fi
 
   echo "$name"
+}
+
+findowners() {
+  lookin=`pwd`;
+  while [ "$lookin" != "" ]; do
+    ownersfile="$lookin/OWNERS"
+    echo "- $ownersfile"
+    cat $ownersfile 2>/dev/null && lookin="/"
+    lookin=`echo "$lookin" | sed -r 's/(.*)\/.*/\1/'`
+  done
 }
 
