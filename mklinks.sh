@@ -15,6 +15,8 @@ for file in $files; do
     ;;
   README | mklinks.sh | .git )
     ;;
+  .ssh )
+    echo "IGNORING $file - not ready to handle non-complete dirs!" ;; 
   * )
     cd $HOMEDIR
     target=$RELPATH$file
