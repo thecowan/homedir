@@ -118,7 +118,7 @@ elif [ "$color_prompt" = full ]; then
     PROMPT_COLOR=`extColor 100`
 fi
 
-PROMPT="${USER_COLOR}\u@${HOST}${COLOR_OFF}:${DIR_COLOR}\w${COLOR_OFF} \$(in_repo)${COLOR_SCM_BRANCH}\$(hg_branch)\$(git_branch)\$(p4_client_name)${COLOR_OFF}${COLOR_SCM_STATE}\$(hg_status)${COLOR_OFF}\n${PROMPT_COLOR}[\!] \$(prompt_char)${COLOR_OFF}"
+PROMPT="${USER_COLOR}\u@${HOST}${COLOR_OFF}:${DIR_COLOR}\w${COLOR_OFF} \$(in_repo)${COLOR_SCM_BRANCH}\$(hg_branch)\$(git_branch)\$(p4_client_name)\$(cloud_client)${COLOR_OFF}${COLOR_SCM_STATE}\$(hg_status)${COLOR_OFF}\n${PROMPT_COLOR}[\!] \$(prompt_char)${COLOR_OFF}"
 
 unset color_prompt force_color_prompt USER_COLOR DIR_COLOR 
 
