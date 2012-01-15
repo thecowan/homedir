@@ -159,6 +159,8 @@ function extColor() { echo -n "\[\033[38;5;$1m\]"; }
 # from http://stevelosh.com/blog/2010/02/my-extravagant-zsh-prompt/
 function prompt_char() {
     #echo -ne "$COMMAND_STATUS_COLOR"
+    [[ $PWD =~ $HOME/src/cloud/([^/]+) ]] && echo '☁' && return
+    [[ $PWD =~ .*/src/cloud/[^/]+/([^/]+) ]] && echo '☁' && return
     git branch >/dev/null 2>/dev/null && echo '±' && return
     hg root >/dev/null 2>/dev/null && echo '☿' && return
     svn info >/dev/null 2>/dev/null && echo '∫' && return
@@ -169,9 +171,11 @@ function prompt_char() {
 # http://stevelosh.com/blog/2009/03/mercurial-bash-prompts/
 
 in_repo() {
-	[[ `hg branch 2> /dev/null` ]] && echo 'on ' && return
-	[[ `git symbolic-ref HEAD 2> /dev/null` ]] && echo 'on ' && return
-	[[ `p4_client_name 2> /dev/null` ]] && echo 'on ' && return 
+    [[ $PWD =~ $HOME/src/cloud/([^/]+) ]] && echo 'on ' && return
+    [[ $PWD =~ .*/src/cloud/[^/]+/([^/]+) ]] && echo 'on ' && return
+    [[ `hg branch 2> /dev/null` ]] && echo 'on ' && return
+    [[ `git symbolic-ref HEAD 2> /dev/null` ]] && echo 'on ' && return
+    [[ `p4_client_name 2> /dev/null` ]] && echo 'on ' && return
 }
 
 hg_branch() {
@@ -206,6 +210,12 @@ p4_client_name() {
 
   echo "$name"
 }
+
+cloud_client() {
+  [[ $PWD =~ $HOME/src/cloud/([^/]+) ]] && echo ${BASH_REMATCH[1]} && return
+  [[ $PWD =~ .*/src/cloud/[^/]+/([^/]+) ]] && echo ${BASH_REMATCH[1]}
+}
+
 
 findowners() {
   lookin=`pwd`;
