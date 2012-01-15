@@ -5,3 +5,7 @@ alias ls="ls -FG"
 # GROWL_ENABLED=true
 
 # PS1COLOR='\[\033[0;34m\]' # blue prompt
+
+# MacPorts-friendly paths
+addToPath /opt/local/bin
+addToPath /opt/local/sbin
