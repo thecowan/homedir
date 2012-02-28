@@ -43,25 +43,39 @@ export HISTFILESIZE=2000
 
 
 # Color & Prompt stuff
-COLOR_NONE="\[\033[0m\]"
-COLOR_LIGHT_WHITE="\[\033[1;37m\]"
-COLOR_WHITE="\[\033[0;37m\]"
-COLOR_GRAY="\[\033[1;30m\]"
-COLOR_BLACK="\[\033[0;30m\]"
+# bashified from https://raw.github.com/sykora/etc/master/zsh/functions/spectrum/
+declare -A FX FG BG
+FX=(
+  [reset]="\[\033[00m\]"
+  [bold]="\[\033[01m\]"
+  [no-bold]="\[\033[22m\]"
+  [italic]="\[\033[03m\]"
+  [no-italic]="\[\033[23m\]"
+  [underline]="\[\033[04m\]"
+  [no-underline]="\[\033[24m\]"
+  [blink]="\[\033[05m\]"
+  [no-blink]="\[\033[25m\]"
+  [blink]="\[\033[07m\]"
+  [no-blink]="\[\033[27m\]"
+)
 
-COLOR_RED="\[\033[0;31m\]"
-COLOR_LIGHT_RED="\[\033[1;31m\]"
-COLOR_GREEN="\[\033[0;32m\]"
-COLOR_LIGHT_GREEN="\[\033[1;32m\]"
-COLOR_YELLOW="\[\033[0;33m\]"
-COLOR_LIGHT_YELLOW="\[\033[1;33m\]"
-COLOR_BLUE="\[\033[0;34m\]"
-COLOR_LIGHT_BLUE="\[\033[1;34m\]"
-COLOR_MAGENTA="\[\033[0;35m\]"
-COLOR_LIGHT_MAGENTA="\[\033[1;35m\]"
-COLOR_CYAN="\[\033[0;36m\]"
-COLOR_LIGHT_CYAN="\[\033[1;36m\]"
+FG=()
+BG=()
+for color in {000..255}; do
+  FG+=([$color]="\[\033[38;5;${color}m\]")
+  BG+=([$color]="\[\033[48;5;${color}m\]")
+done
 
+declare -A rawcolors
+rawcolors=([black]=30 [red]=31 [green]=32 [yellow]=33 [blue]=34 [magenta]=35 [cyan]=36 [white]=37)
+for color in ${!rawcolors[*]}; do
+  fgcode=${rawcolors[$color]}
+  bgcode=$((${rawcolors[$color]} + 10))
+  FG+=([$color]="\[\033[0;${fgcode}m\]" [light_$color]="\[\033[1;${fgcode}m\]")
+  BG+=([$color]="\[\043[0;${bgcode}m\]" [light_$color]="\[\043[1;${bgcode}m\]")
+done
+FG+=([grey]="${FG[light_black]}" [gray]="${FG[light_black]}")
+BG+=([grey]="${BG[light_black]}" [gray]="${BG[light_black]}")
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
@@ -92,36 +106,36 @@ esac
 #force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
+  if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    # We have color support; assume it's compliant with Ecma-48
+    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+    # a case would tend to support setf rather than setaf.)
+    color_prompt=yes
+  else
+    color_prompt=
+  fi
 fi
 
 
 # Load custom functions
 [[ -r ${HOME}/.bash/functions ]] && source ${HOME}/.bash/functions
+
+COLOR_OFF=${FX[reset]}
 if [ "$color_prompt" = yes ]; then
-    USER_COLOR=$COLOR_GREEN
-    DIR_COLOR=$COLOR_BLUE
-    COLOR_OFF=$COLOR_NONE
-    COLOR_SCM_BRANCH=$COLOR_RED
-    COLOR_SCM_STATE=$COLOR_LIGHT_RED
-    COLOR_PROMPT_OK=$COLOR_WHITE
-    COLOR_PROMPT_ERROR=$COLOR_RED
+    USER_COLOR=${FG[light_blue]}
+    DIR_COLOR=${FG[blue]}
+    COLOR_SCM_BRANCH=${FG[red]}
+    COLOR_SCM_STATE=${FG[light_red]}
+    COLOR_PROMPT_OK=${FG[white]}
+    COLOR_PROMPT_ERROR=${FG[red]}
 elif [ "$color_prompt" = full ]; then
-    USER_COLOR=`extColor 22`
-    DIR_COLOR=`extColor 19`
-    COLOR_SCM_BRANCH=`extColor 172`
-    COLOR_SCM_STATE=`extColor 160`
-    COLOR_OFF=$COLOR_NONE
-    COLOR_PROMPT_OK=`extColor 100`
-    COLOR_PROMPT_ERROR=`extColor 75`
-    PROMPT_COLOR=`extColor 100`
+    USER_COLOR=${FG[025]}
+    DIR_COLOR=${FG[019]}
+    COLOR_SCM_BRANCH=${FG[172]}
+    COLOR_SCM_STATE=${FG[160]}
+    COLOR_PROMPT_OK=${FG[100]}
+    COLOR_PROMPT_ERROR=${FG[075]}
+    PROMPT_COLOR=${FG[100]}
 fi
 
 # unset color_prompt force_color_prompt 

@@ -153,10 +153,6 @@ function toUpper() {
 #}
 
 
-function extColor() { echo -n "\[\033[38;5;$1m\]"; }
-function extBackColor() { echo -n "\[\033[48;5;$1m\]"; }
-
-
 # from http://stevelosh.com/blog/2010/02/my-extravagant-zsh-prompt/
 function prompt_char() {
     #echo -ne "$COMMAND_STATUS_COLOR"
