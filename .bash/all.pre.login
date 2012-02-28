@@ -70,6 +70,12 @@ fi
 
 if [ "$COLORTERM" = "gnome-terminal" ]; then
     export TERM=gnome-256color
+    if ! tput longname >/dev/null 2>/dev/null ; then
+      export TERM=gnome-color
+    fi
+    if ! tput longname >/dev/null 2>/dev/null ; then
+      export TERM=xterm-color
+    fi
 fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
@@ -118,9 +124,7 @@ elif [ "$color_prompt" = full ]; then
     PROMPT_COLOR=`extColor 100`
 fi
 
-PROMPT="${USER_COLOR}\u@${HOST}${COLOR_OFF}:${DIR_COLOR}\w${COLOR_OFF} \$(in_repo)${COLOR_SCM_BRANCH}\$(hg_branch)\$(git_branch)\$(p4_client_name)\$(cloud_client)${COLOR_OFF}${COLOR_SCM_STATE}\$(hg_status)${COLOR_OFF}\n${PROMPT_COLOR}[\!] \$(prompt_char)${COLOR_OFF}"
-
-unset color_prompt force_color_prompt USER_COLOR DIR_COLOR 
+# unset color_prompt force_color_prompt 
 
 
 PS2="moar!> "
