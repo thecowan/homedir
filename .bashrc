@@ -18,7 +18,7 @@ fi
 
 HOSTNAME=`echo ${HOSTNAME} | tr A-Z a-z`
 HOST=${HOSTNAME%%.*}
-OS=`uname | tr A-Z a-z`
+OS=`uname | sed -e "s/_.*//" | tr A-Z a-z`
 
 # build networks array -- this allows for login scripts that apply to increasinly more specific
 # portions of a network.  For example, given the hostname 'server.sfo.example.com', the NETWORKS
