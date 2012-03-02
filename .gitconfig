@@ -1,3 +1,10 @@
 [user]
 	name = Paul Cowan
 	email = paul@custardsource.com
+
+[alias]
+	st = status
+	a = add
+	c = commit
+	ca = commit -a
+	d = diff
