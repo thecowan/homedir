@@ -18,6 +18,7 @@ export PAGER="less"
 #----------------------------------------------------------#
 # Let's add a little color to the world
 #----------------------------------------------------------#
+# TODO: build custom color DB (dircolor -p, example seq. '00;48;5;11;38;5;100')
 # enable color support of ls (may be named dircolors or gdircolors)
 eval "`dircolors -b 2>/dev/null`"
 
