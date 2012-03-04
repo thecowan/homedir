@@ -175,3 +175,18 @@ function command_log() {
 f() {
     grep -h "$@"~/.shell_logs/* | sort | tail -n15
 }
+
+
+# From Nik's bash tips, modified not to include setPS1
+case "$-" in
+*i*)
+  # Interactive shell
+
+  # Breaks babysitter test if run automatically
+  trap 'history -a; history -n; if [ "$BASH_COMMAND" != setPS1 ]; then echo -ne "\e]0;${USER}@${HOST}:$BASH_COMMAND\007"; fi' DEBUG
+  ;;
+*)
+  # Non-interactive shell
+  ;;
+esac
+
