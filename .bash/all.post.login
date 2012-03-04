@@ -4,7 +4,6 @@
 #
 PROMPT_COMMAND='setPS1'
 
-PROMPT="${USER_COLOR}\u@${HOST}${COLOR_OFF}:${DIR_COLOR}\w${COLOR_OFF} \$(in_repo)${COLOR_SCM_BRANCH}\$(hg_branch)\$(git_branch)\$(p4_client_name)\$(cloud_client)${COLOR_OFF}${COLOR_SCM_STATE}\$(hg_status)${COLOR_OFF}\n${PROMPT_COLOR}[\!] \$(prompt_char)${COLOR_OFF}"
 
 addToPath $HOME/bin
 addToPathVar CDPATH ~
@@ -18,6 +17,7 @@ export PAGER="less"
 #----------------------------------------------------------#
 # Let's add a little color to the world
 #----------------------------------------------------------#
+# TODO: build custom color DB (dircolor -p, example seq. '00;48;5;11;38;5;100')
 # enable color support of ls (may be named dircolors or gdircolors)
 eval "`dircolors -b 2>/dev/null`"
 

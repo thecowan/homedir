@@ -73,8 +73,8 @@ rawcolors=([black]=30 [red]=31 [green]=32 [yellow]=33 [blue]=34 [magenta]=35 [cy
 for color in ${!rawcolors[*]}; do
   fgcode=${rawcolors[$color]}
   bgcode=$((${rawcolors[$color]} + 10))
-  FG+=([$color]="\[\033[0;${fgcode}m\]" [light_$color]="\[\033[1;${fgcode}m\]")
-  BG+=([$color]="\[\043[0;${bgcode}m\]" [light_$color]="\[\043[1;${bgcode}m\]")
+  FG+=([$color]="\[\033[${fgcode}m\]" [light_$color]="\[\033[1;${fgcode}m\]")
+  BG+=([$color]="\[\033[${bgcode}m\]" [light_$color]="\[\033[1;${bgcode}m\]")
 done
 FG+=([grey]="${FG[light_black]}" [gray]="${FG[light_black]}")
 BG+=([grey]="${BG[light_black]}" [gray]="${BG[light_black]}")
@@ -128,19 +128,19 @@ if [ "$color_prompt" = yes ]; then
     DIR_COLOR=${FG[blue]}
     COLOR_SCM_BRANCH=${FG[red]}
     COLOR_SCM_STATE=${FG[light_red]}
-    COLOR_PROMPT_OK=${FG[white]}
+    COLOR_PROMPT_OK=${FG[green]}
     COLOR_PROMPT_ERROR=${FG[red]}
 elif [ "$color_prompt" = full ]; then
     USER_COLOR=${FG[025]}
     DIR_COLOR=${FG[019]}
     COLOR_SCM_BRANCH=${FG[172]}
     COLOR_SCM_STATE=${FG[160]}
-    COLOR_PROMPT_OK=${FG[100]}
-    COLOR_PROMPT_ERROR=${FG[075]}
+    COLOR_PROMPT_OK=${FG[green]}
+    COLOR_PROMPT_ERROR=${BG[red]}${FG[light_white]}
     PROMPT_COLOR=${FG[100]}
 fi
 
-# unset color_prompt force_color_prompt 
+# unset color_prompt force_color_prompt
 
 
 PS2="moar!> "
