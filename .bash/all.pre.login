@@ -1,13 +1,14 @@
 #----------------------------------------------------------#
 # Bash Options
 #----------------------------------------------------------#
-# set -o vi
+set -o vi
 # set -o ignoreeof
 
 shopt -s cdspell
 shopt -s cmdhist
 shopt -s dotglob
 shopt -s extglob
+shopt -s autocd
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -26,10 +27,11 @@ shopt -s histappend
 
 # Prevent common commands from being added to .bash_history
 export HISTIGNORE="&:ls:jobs:[bf]g:exit:clear"
+export HISTTIMEFORMAT="%F %T "
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-export HISTSIZE=1000
-export HISTFILESIZE=2000
+export HISTSIZE=1000000
+export HISTFILESIZE=1000000000
 
 
 
