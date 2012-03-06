@@ -11,6 +11,7 @@ addToPathVar CDPATH .
 export EDITOR=vim
 export VISUAL=${EDITOR}
 export PAGER="less"
+export G4PENDINGSTYLE=fullpath
 
 
 
