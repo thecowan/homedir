@@ -51,3 +51,5 @@ if [ "$GROWL_ENABLED" = true ]; then
 else
     alias alert="echo -en \"\\007\""
 fi
+
+alias rmt="rm -v ~/Downloads/*.torrent"

@@ -8,3 +8,5 @@
 	c = commit
 	ca = commit -a
 	d = diff
+[color]
+	ui = auto
