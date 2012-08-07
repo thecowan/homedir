@@ -228,5 +228,5 @@ findowners() {
 
 tmuxs() {
   local session=${1:-default}
-  tmux has-session -t $session 2>/dev/null && tmux attach-session -t $session || tmux new-session -s $session
+  tmux has-session -t $session && tmux attach-session -t $session || tmux new-session -s $session
 }
