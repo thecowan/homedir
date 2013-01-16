@@ -230,3 +230,29 @@ tmuxs() {
   local session=${1:-default}
   tmux has-session -t $session && tmux attach-session -t $session || tmux new-session -s $session
 }
+
+
+# stolen from krs
+settitle ()
+{
+  MESSAGE=$1
+
+  case $TERM in
+    xterm* | screen* | eterm-color* | gnome* )
+      echo -e -n "\033]2;$USER@$HOST:$MESSAGE\007"
+      PS1_NO_TITLEBAR=1
+      ;;
+    *)
+      # do nothing
+      ;;
+  esac
+
+   [ -z "$TMUX_PANE" ] || tmux rename-window "$MESSAGE"
+}
+
+# stolen from krs
+unsettitle ()
+{
+  unset PS1_NO_TITLEBAR
+  [ -z "$TMUX_PANE" ] || tmux set-window-option automatic-rename on
+}
