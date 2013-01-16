@@ -1,0 +1,12 @@
+[ui]
+username=Paul Cowan <paul@custardsource.com>
+
+[pager]
+pager = LESS='FSRX' less
+
+
+[extensions]
+color = 
+pager =
+hgk =
+graphlog =
