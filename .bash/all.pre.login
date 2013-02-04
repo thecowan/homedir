@@ -84,22 +84,74 @@ if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-if [ "$COLORTERM" = "gnome-terminal" -a ! "$TERM" = "screen-256color" ]; then
-    export TERM=gnome-256color
-    if ! tput longname >/dev/null 2>/dev/null ; then
-      export TERM=gnome-color
-    fi
-    if ! tput longname >/dev/null 2>/dev/null ; then
-      export TERM=xterm-color
+# ##################################################################
+# Fix broken termdefs. From https://gist.github.com/1167205
+if [ "$TERM" = "xterm" ]; then
+    if [ -z "$COLORTERM" ]; then
+        if [ -z "$XTERM_VERSION" ]; then
+            echo "Warning: Terminal wrongly calling itself 'xterm'."
+        else
+            case "$XTERM_VERSION" in
+            "XTerm(256)") TERM="xterm-256color";;
+            "XTerm(88)") TERM="xterm-88color";;
+            "XTerm") ;;
+            *)
+                echo "Warning: Unrecognized XTERM_VERSION: $XTERM_VERSION";;
+            esac
+        fi
+    else
+        case "$COLORTERM" in
+            gnome-terminal)
+                # Those crafty Gnome folks require you to check COLORTERM,
+                # but don't allow you to just *favor* the setting over TERM.
+                # Instead you need to compare it and perform some guesses
+                # based upon the value. This is, perhaps, too simplistic.
+                TERM="gnome-256color";;
+            Terminal)
+                # special-case xfce4-terminal
+                TERM="gnome-256color";;
+            *)
+                echo "Warning: Unrecognized COLORTERM: $COLORTERM";;
+        esac
     fi
 fi
 
+SCREEN_COLORS="`tput colors`"
+if [ -z "$SCREEN_COLORS" ]; then
+    case "$TERM" in
+        screen-*color-bce)
+            echo "Unknown terminal $TERM. Falling back to 'screen-bce'."
+            export TERM=screen-bce  ;;
+        *-88color)
+            echo "Unknown terminal $TERM. Falling back to 'xterm-88color'."
+            export TERM=xterm-88color  ;;
+        *-256color)
+            echo "Unknown terminal $TERM. Falling back to 'xterm-256color'."
+            export TERM=xterm-256color  ;;
+    esac
+    SCREEN_COLORS=`tput colors`
+fi
+if [ -z "$SCREEN_COLORS" ]; then
+    case "$TERM" in
+        gnome*|xterm*|konsole*|aterm|[Ee]term)
+            echo "Unknown terminal $TERM. Falling back to 'xterm'."
+            export TERM=xterm  ;;
+        rxvt*)
+            echo "Unknown terminal $TERM. Falling back to 'rxvt'."
+            export TERM=rxvt  ;;
+        screen*)
+            echo "Unknown terminal $TERM. Falling back to 'screen'."
+            export TERM=screen  ;;
+    esac
+    SCREEN_COLORS=`tput colors`
+fi
+# ##################################################################
+
 # set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color) color_prompt=yes;;
-    xterm-256color|gnome-256color|screen-256color) color_prompt=full;;
-    # xterm) tput setaf 1 >& /dev/null && color_prompt=yes;;
-esac
+tput setaf 1 >& /dev/null && color_prompt=yes
+if [ "$SCREEN_COLORS" = "256" ]; then
+    color_prompt=full;
+fi
 
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
@@ -141,7 +193,6 @@ elif [ "$color_prompt" = full ]; then
 fi
 
 # unset color_prompt force_color_prompt
-
 
 PS2="moar!> "
 
