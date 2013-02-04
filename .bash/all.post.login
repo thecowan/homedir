@@ -20,7 +20,14 @@ export G4PENDINGSTYLE=fullpath
 #----------------------------------------------------------#
 # TODO: build custom color DB (dircolor -p, example seq. '00;48;5;11;38;5;100')
 # enable color support of ls (may be named dircolors or gdircolors)
-eval "`dircolors -b 2>/dev/null`"
+#
+#
+if [ "$color_prompt" = full ]; then
+  eval $(dircolors ~/.dir_colors/dircolors.256dark)
+else
+  eval "`dircolors -b 2>/dev/null`"
+fi
+
 
 # have `ls` output color if it knows how
 if [[ `ls --version 2>/dev/null | grep coreutils` ]]; then
