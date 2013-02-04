@@ -161,7 +161,7 @@ function prompt_char() {
     [[ $PWD =~ $HOME/src/cloud/([^/]+) ]] && echo '☁' && return
     [[ $PWD =~ .*/src/cloud/[^/]+/([^/]+) ]] && echo '☁' && return
     git branch >/dev/null 2>/dev/null && echo '±' && return
-    hg root >/dev/null 2>/dev/null && echo '☿' && return
+    command -v hg >/dev/null 2>&1 && hg root >/dev/null 2>/dev/null && echo '☿' && return
     svn info >/dev/null 2>/dev/null && echo '∫' && return
     p4_client_name >/dev/null 2>/dev/null && echo '℗' && return
     echo '$'
@@ -172,17 +172,19 @@ function prompt_char() {
 in_repo() {
     [[ $PWD =~ $HOME/src/cloud/([^/]+) ]] && echo 'on ' && return
     [[ $PWD =~ .*/src/cloud/[^/]+/([^/]+) ]] && echo 'on ' && return
-    [[ `hg branch 2> /dev/null` ]] && echo 'on ' && return
+    command -v hg >/dev/null 2>&1 && [[ `hg branch 2> /dev/null` ]] && echo 'on ' && return
     [[ `git symbolic-ref HEAD 2> /dev/null` ]] && echo 'on ' && return
     [[ `p4_client_name 2> /dev/null` ]] && echo 'on ' && return
 }
 
 hg_branch() {
-	hg branch 2> /dev/null
+    command -v hg >/dev/null 2>&1 && hg branch 2> /dev/null
 }
 
 hg_status() {
-	hg status 2> /dev/null | awk '$1 == "?" { print "?"; print " " } $1 != "?" { print "!"; print " " }'  | sort | uniq | tr -d '\n'
+    # T="$(date +%s%N)"; 
+    command -v hg >/dev/null 2>&1 && hg status 2> /dev/null | awk '$1 == "?" { print "?"; print " " } $1 != "?" { print "!"; print " " }'  | sort | uniq | tr -d '\n'
+    # T="$(($(date +%s%N)-T))"; M="$((T/1000000))"; echo "hg_status: ${M}"
 }
 
 function git_branch() {
