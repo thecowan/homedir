@@ -3,4 +3,5 @@ include "%L"
 <Multi_key> <f> <v>   		: "✌"   U270C   	# VICTORY HAND
 <Multi_key> <s> <n> <o> <w>	: "☃"   U2603   	# SNOWMAN FOR YOU
 <Multi_key> <s> <n> <o> <p>	: "☃"   U2603   	# SNOWMAN FOR YOU
+<Multi_key> <l> <o> <d>		: "ಠ_ಠ" U0CA0   	# GRR
 
