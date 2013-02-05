@@ -12,3 +12,5 @@
 	ui = auto
 [core]
 	excludesfile = /usr/local/google/home/cow/.gitignore_global
+[push]
+	default = simple
