@@ -1,0 +1,9 @@
+#!/bin/bash
+
+STATE=$(pacmd list-sinks | grep muted | egrep -o '(yes|no)')
+
+if [[ $STATE == 'yes' ]]; then
+  pacmd set-sink-mute 0 0
+else
+  pacmd set-sink-mute 0 1
+fi
