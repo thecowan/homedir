@@ -1,5 +1,6 @@
 alias go=open
 alias ls="ls -FG"
+alias top="top -F -R -o cpu"
 
 # Not yet working - need to fix (and also make iTerm2-only)
 # GROWL_ENABLED=true
