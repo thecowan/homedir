@@ -10,3 +10,5 @@ alias top="top -F -R -o cpu"
 # MacPorts-friendly paths
 addToPath /opt/local/bin
 addToPath /opt/local/sbin
+
+export SSH_ASKPASS="$HOME/bin/mac-ssh-askpass"
