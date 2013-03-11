@@ -56,4 +56,5 @@ shopt -s dotglob
 
 linkdir $BASEPATH / "" $HOME ""
 
+chmod 700 ~/.ssh/control
 
