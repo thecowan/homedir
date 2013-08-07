@@ -34,7 +34,7 @@ function setPS1
     STATUS_REPORT="ಠ_ಠ"
   fi
 
-  PROMPT="${USER_COLOR}\u@${HOST}${COLOR_OFF}:${DIR_COLOR}\w${COLOR_OFF} \$(in_repo)${COLOR_SCM_BRANCH}\$(hg_branch)\$(git_branch)\$(p4_client_name)\$(cloud_client)${COLOR_OFF}${COLOR_SCM_STATE}\$(hg_status)${COLOR_OFF}\n[\! ${STATUS_COLOR}${STATUS_REPORT}${COLOR_OFF}] \$(prompt_char)${COLOR_OFF}"
+  PROMPT="${USER_COLOR}$(whoami)@${HOST}${COLOR_OFF}:${DIR_COLOR}\w${COLOR_OFF} \$(in_repo)${COLOR_SCM_BRANCH}\$(hg_branch)\$(git_branch)\$(p4_client_name)\$(cloud_client)${COLOR_OFF}${COLOR_SCM_STATE}\$(hg_status)${COLOR_OFF}\n[\! ${STATUS_COLOR}${STATUS_REPORT}${COLOR_OFF}] \$(prompt_char)${COLOR_OFF}"
 
   PS1="${PS1COLOR}${PROMPT}\[\033[0m\] "
 
@@ -48,7 +48,7 @@ function setPS1
   if [ -z "${PS1_NO_TITLEBAR}" ]; then
     case $TERM in
       xterm*|rxvt*|gnome*|screen*)
-        local PS1_TITLEBAR="\[\e]0;${debian_chroot:+($debian_chroot)}\u@${HOST}:\w\a\]"
+        local PS1_TITLEBAR="\[\e]0;${debian_chroot:+($debian_chroot)}$(whoami)@${HOST}:\w\a\]"
         ;;
       *)
         local PS1_TITLEBAR=''
