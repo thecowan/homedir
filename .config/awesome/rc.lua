@@ -14,6 +14,7 @@ require("clementine")
 
 -- Load Debian menu entries
 require("debian.menu")
+require("vain")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -48,12 +49,13 @@ awful.util.spawn_with_shell("setxkbmap -option compose:caps")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/usr/share/awesome/themes/sky/theme.lua")
+beautiful.init(os.getenv("HOME") .. "/.config/awesome/mytheme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "x-terminal-emulator"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
+under_gnome = (os.getenv("XDG_CURRENT_DESKTOP") == "GNOME")
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -66,26 +68,26 @@ modkey = "Mod4"
 layouts =
 {
     awful.layout.suit.floating,
-    -- awful.layout.suit.tile,
+     -- awful.layout.suit.tile,
     awful.layout.suit.tile.left,
-    -- awful.layout.suit.tile.bottom,
+     -- awful.layout.suit.tile.bottom,
     awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
+    -- awful.layout.suit.fair,
+    -- awful.layout.suit.fair.horizontal,
     awful.layout.suit.spiral,
-    -- awful.layout.suit.spiral.dwindle,
+     -- awful.layout.suit.spiral.dwindle,
     awful.layout.suit.max,
-    -- awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier
+     -- awful.layout.suit.max.fullscreen,
+     -- awful.layout.suit.magnifier
 }
 -- }}}
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
-tags[1] = awful.tag({ "work", 2, 3, 4, 5}, 1, layouts[2])
+tags[1] = awful.tag({ "work", "code!", 3, 4, 5}, 1, layouts[2])
 if screen.count() > 1 then
-  tags[2] = awful.tag({ "home", "media", "irc", 4, 5}, 2, layouts[2])
+  tags[2] = awful.tag({ "home", "comms", "media", "hack", "meta"}, 2, layouts[2])
   for s = 3, screen.count() do
       -- Each screen has its own tag table.
       tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[2])
@@ -198,24 +200,29 @@ for s = 1, screen.count() do
       end, 10)
 
     -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top", screen = s })
+    if under_gnome then
+	    mywibox[s] = awful.wibox({ position = "bottom", screen = s })
+    else
+	    mywibox[s] = awful.wibox({ position = "top", screen = s })
+    end
+
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
-        {
-            mylauncher,
-            mytaglist[s],
-            mypromptbox[s],
-            layout = awful.widget.layout.horizontal.leftright
-        },
-        mylayoutbox[s],
-        mytextclock,
+	{
+	    mylauncher,
+	    mytaglist[s],
+	    mypromptbox[s],
+	    layout = awful.widget.layout.horizontal.leftright
+	},
+	mylayoutbox[s],
+	mytextclock,
 	clementine_widget,
 	volume_widget,
-        s == 1 and mysystray or nil,
+	s == 1 and mysystray or nil,
 	-- mpdwidget,
 
-        mytasklist[s],
-        layout = awful.widget.layout.horizontal.rightleft
+	mytasklist[s],
+	layout = awful.widget.layout.horizontal.rightleft
     }
 end
 -- }}}
@@ -287,15 +294,6 @@ globalkeys = awful.util.table.join(
                   awful.util.getdir("cache") .. "/history_eval")
               end),
 
-
-
-    awful.key({ }, "XF86AudioRaiseVolume", function ()
-        awful.util.spawn("amixer set Master 5%+") end),
-    awful.key({ }, "XF86AudioLowerVolume", function ()
-        awful.util.spawn("amixer set Master 5%-") end),
-    awful.key({ }, "XF86AudioMute", function ()
-        awful.util.spawn("/usr/local/google/home/cow/bin/pulsemutetoggle") end),
-
     awful.key({ "Shift", "Control" }, "i", function ()
         awful.util.spawn("fetchotp -x --account='Google Internal 2Factor'") end),
     awful.key({ "Shift", "Control" }, "j", function ()
@@ -311,6 +309,19 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86Calculator", function () awful.util.spawn("gnome-calculator") end),
     awful.key({ modkey }, "F12", function () awful.util.spawn("gnome-screensaver-command  --lock") end)
 )
+
+if not under_gnome then
+  globalkeys = awful.util.table.join(globalkeys,
+    awful.key({ }, "XF86AudioRaiseVolume", function ()
+        awful.util.spawn("amixer set Master 5%+") end),
+    awful.key({ }, "XF86AudioLowerVolume", function ()
+        awful.util.spawn("amixer set Master 5%-") end),
+    awful.key({ }, "XF86AudioMute", function ()
+        awful.util.spawn("/usr/local/google/home/cow/bin/pulsemutetoggle") end)
+
+  )
+end
+
 
 clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
@@ -344,10 +355,22 @@ for i = 1, 5 do
                   end),
         awful.key({"Shift" }, "XF86Launch" .. i + 4,
                   function ()
-                        local screen = mouse.screen
-                        if tags[screen][i] then
-                            awful.tag.viewonly(tags[screen][i])
-                        end
+                      if client.focus and tags[client.focus.screen][i] then
+                          awful.client.movetotag(tags[client.focus.screen][i])
+                      end
+                  end),
+        awful.key({"Control" }, "XF86Launch" .. i + 4,
+                  function ()
+                      local screen = mouse.screen
+                      if tags[screen][i] then
+                          awful.tag.viewtoggle(tags[screen][i])
+                      end
+                  end),
+        awful.key({"Control", "Shift" }, "XF86Launch" .. i + 4,
+                  function ()
+                      if client.focus and tags[client.focus.screen][i] then
+                          awful.client.toggletag(tags[client.focus.screen][i])
+                      end
                   end)
     )
 end
@@ -420,7 +443,8 @@ awful.rules.rules = {
     --   properties = { tag = tags[1][2] } },
     -- gchat chrome windows, also have WM_WINDOW_ROLE(STRING) = "pop-up"
     { rule = { instance= "crx_ljclpkphhpbpinifbeabbhlfddcpfdde" },
-      properties = { floating = true } },
+      properties = { floating = false, tag = tags[2][2] },
+      },
 }
 -- }}}
 
@@ -454,5 +478,33 @@ end)
 client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 
+-- awful.layout.set(vain.layout.termfair, tags[2][3])
+-- awful.tag.setnmaster(2, tags[2][3])
+
+-- cascadebrowse for browser pages (1.1 and 2.1)
+awful.layout.set(vain.layout.cascadebrowse, tags[1][1])
+awful.tag.setnmaster(5, tags[1][1])
+awful.tag.setncol(1, tags[1][1])
+awful.tag.setmwfact(0.75, tags[1][1])
+awful.layout.set(vain.layout.cascadebrowse, tags[2][1])
+awful.tag.setnmaster(5, tags[2][1])
+awful.tag.setncol(1, tags[2][1])
+awful.tag.setmwfact(0.75, tags[1][1])
+vain.layout.cascadebrowse.cascade_offset_x = 50 
+vain.layout.cascadebrowse.cascade_offset_y = 100
+vain.layout.cascadebrowse.extra_padding = 5
+
+-- termfair for work (1.*)
+for i = 2, #tags[1] do
+  awful.layout.set(vain.layout.centerwork, tags[1][i])
+  awful.tag.setmwfact(0.45, tags[1][i])
+  -- awful.tag.setnmaster(2, tags[1][i])
+end
+
+-- cascadebrowse for irc/chat (2.2)
+awful.layout.set(vain.layout.cascadebrowse, tags[2][2])
+awful.tag.setnmaster(5, tags[2][2])
+awful.tag.setncol(2, tags[2][2])
+awful.tag.setmwfact(0.75, tags[2][2])
 
 -- }}}
