@@ -1,3 +1,7 @@
-#!/bin/bash
-
-( x=`tput op` y=`printf %$((${COLUMNS}-6))s`;for i in {0..256};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done; )
+#!/usr/bin/perl
+print "\n";
+print map sprintf("\x1b[48;5;%um%4u", $_, $_), 0..255;
+print "\x1b[49m\n";
+print "\n";
+print map sprintf("\x1b[38;5;%um%4u", $_, $_), 0..255;
+print "\x1b[39m\n";

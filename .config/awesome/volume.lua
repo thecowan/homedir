@@ -6,7 +6,12 @@ volume_widget = widget({ type = "textbox", name = "tb_volume",
         local status = fd:read("*all")
         fd:close()
         
-        local volume = tonumber(string.match(status, "(%d?%d?%d)%%")) / 100
+	local match = string.match(status, "(%d?%d?%d)%%")
+	if not match then
+	    return
+	end
+
+        local volume = tonumber(match) / 100
         -- volume = string.format("% 3d", volume)
 
         status = string.match(status, "%[(o[^%]]*)%]")

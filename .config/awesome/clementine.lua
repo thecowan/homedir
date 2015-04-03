@@ -14,7 +14,7 @@ function update_now_playing(widget)
         fd = io.popen("qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get org.mpris.MediaPlayer2.Player Metadata")
         local metadata = fd:read("*all")
         fd:close()
-        widget.text = "Playing: " .. paused
+        widget.text = "Playing: " 
         -- widget.text = metadata
     end
 

@@ -258,3 +258,16 @@ unsettitle ()
   unset PS1_NO_TITLEBAR
   [ -z "$TMUX_PANE" ] || tmux set-window-option automatic-rename on
 }
+
+dice() {
+  for var in "$@"
+  do
+    echo paul >> "$var/.dice"
+  done
+}
+nodice() {
+  for var in "$@"
+  do
+    echo '!paul' >> "$1/.dice"
+  done
+}
