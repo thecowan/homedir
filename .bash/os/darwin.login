@@ -10,5 +10,10 @@ alias top="top -F -R -o cpu"
 # MacPorts-friendly paths
 addToPath /opt/local/bin
 addToPath /opt/local/sbin
+addToPath /usr/local/git/current/bin
 
 export SSH_ASKPASS="$HOME/bin/mac-ssh-askpass"
+
+export M2_HOME=/Users/cow/src/oss/apache-maven-3.2.3
+export M2=$M2_HOME/bin
+addToPath $M2
