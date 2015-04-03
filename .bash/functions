@@ -34,7 +34,13 @@ function setPS1
     STATUS_REPORT="ಠ_ಠ"
   fi
 
-  PROMPT="${USER_COLOR}$(whoami)@${HOST}${COLOR_OFF}:${DIR_COLOR}\w${COLOR_OFF} \$(in_repo)${COLOR_SCM_BRANCH}\$(hg_branch)\$(git_branch)\$(p4_client_name)\$(cloud_client)${COLOR_OFF}${COLOR_SCM_STATE}\$(hg_status)${COLOR_OFF}\n[\! ${STATUS_COLOR}${STATUS_REPORT}${COLOR_OFF}] \$(prompt_char)${COLOR_OFF}"
+  if [ -z "$HISTFILE" ]; then
+    HISTORY_WARNING="✪ "
+  else
+    HISTORY_WARNING=""
+  fi
+
+  PROMPT="${HISTORY_WARNING}${USER_COLOR}$(whoami)@${HOST}${COLOR_OFF}:${DIR_COLOR}\w${COLOR_OFF} \$(in_repo)${COLOR_SCM_BRANCH}\$(hg_branch)\$(git_branch)\$(p4_client_name)\$(cloud_client)${COLOR_OFF}${COLOR_SCM_STATE}\$(hg_status)${COLOR_OFF}\n[\! ${STATUS_COLOR}${STATUS_REPORT}${COLOR_OFF}] \$(prompt_char)${COLOR_OFF}"
 
   PS1="${PS1COLOR}${PROMPT}\[\033[0m\] "
 
