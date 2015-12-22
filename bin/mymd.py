@@ -8,6 +8,7 @@ runchecks([
   # Should I check TCON is consistent per folder?
   # "conducted by" banned in TPE1 (cf. BBC Philharmonic)
   # "strict" version - check full release date (yyyy-mm-dd)
+  # Find chinese-looking characters?
   #FrameAbsentCheck(['COMM'], fix=StripFrame(['COMM'])),
   #FrameWhitelistCheck('TPE3', ['xxx']), # conductor
   #FrameWhitelistCheck('TCOM', ['xxx']), # composer
@@ -23,7 +24,8 @@ runchecks([
                                'free', 'chris', 'google', 'daytrotter', 'humblebundle', 'soundsupply', 'bandcamp']),
   FrameWhitelistCheck('TCON', ['Rock', 'Children\'s', 'Lullaby', 'Audiobook', 'Alternative', 'Poetry', 'Soundtrack', 'Indie',
                                'Christmas', 'Pop', 'Folk', 'Electronic', 'Folk', 'Comedy', 'Dance', 'Country', 'Classical',
-                               'Bluegrass', 'Blues', 'World', 'Vocal', 'Swing', 'Punk', 'Hip-Hop', 'Musical', 'Latin', 'Jazz',]),
+                               'Bluegrass', 'Blues', 'World', 'Vocal', 'Swing', 'Punk', 'Hip-Hop', 'Musical', 'Latin', 'Jazz',
+                               'Reggae', 'Mashup', 'R&B', 'Instrumental', 'Funk', 'Lounge', 'Soul', 'Chiptune']),
   #FrameBlacklistCheck('TIT2', [r'[\(\[].*with', r'[\(\[].*live', r'[\(\[].*remix', r'[\(\[].*cover'], regex=True),
   FrameBlacklistCheck('TALB', [r'(?i)dis[kc] [0-9]+'], regex=True),
   FrameBlacklistCheck('TALB', [r'\[\+digital booklet\]'], regex=True),
