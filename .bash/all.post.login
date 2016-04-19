@@ -62,3 +62,5 @@ else
 fi
 
 alias rmt="rm -v ~/Downloads/*.torrent"
+
+alias fuck='sudo $(history -p \!\!)'
