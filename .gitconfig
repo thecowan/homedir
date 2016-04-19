@@ -14,3 +14,5 @@
 	excludesfile = /usr/local/google/home/cow/.gitignore_global
 [push]
 	default = matching
+[google]
+	lastUpdateCheck = 20141020000000

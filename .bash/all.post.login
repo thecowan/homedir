@@ -13,6 +13,7 @@ export VISUAL=${EDITOR}
 export PAGER="less"
 export G4PENDINGSTYLE=fullpath
 export BLOCKSIZE=1024
+export LESS=-XRNF
 
 
 
