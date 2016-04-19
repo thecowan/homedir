@@ -507,4 +507,14 @@ awful.tag.setnmaster(5, tags[2][2])
 awful.tag.setncol(2, tags[2][2])
 awful.tag.setmwfact(0.75, tags[2][2])
 
+-- Override awesome.quit when we're using GNOME
+_awesome_quit = awesome.quit
+awesome.quit = function()
+    if os.getenv("DESKTOP_SESSION") == "gnome-awesome" then
+       os.execute("/usr/bin/gnome-session-quit")
+    else
+       _awesome_quit()
+    end
+end
+
 -- }}}
