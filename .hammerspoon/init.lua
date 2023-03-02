@@ -64,7 +64,7 @@ Intercepted by something else (See 'avoid in-use keys' below): keypad-slash, key
                                       0x4D   -- shows as blank char in keycodes, but hammerspoon receives when injected; likely useable
       kVK_JIS_Yen                   = 0x5D,  -- shows character                     - international3 in karabiner; hammerspoon receives as 'yen'
       kVK_JIS_Underscore            = 0x5E,  -- shows character                     - international1 in Karabiner; hammerspoon recieves as 'underscore'
-      kVK_JIS_KeypadComma           = 0x5F,  -- no character in Key Codes             hammerspoon receives as 'pad,'
+      kVK_JIS_KeypadComma           = 0x5F,  -- no character in Key Codes             hammerspoon receives as 'pad,', but not from karabiner; internal-only?
       kVK_JIS_Eisu                  = 0x66,  -- blank character                     - lang2 in Karabiner - also 1st Japanese string?; karabiner receives as 'eisu'
       kVK_JIS_Kana                  = 0x68   -- blank character                     - lang1 in Karabiner - also 2nd Japanese string?; karabiner receives as 'kana'
                                       0x6C   -- shows as blank char in keycodes, but hammerspoon receives when injected; likely useable
@@ -526,7 +526,7 @@ hs.hotkey.bind(hyper, "pad/", function()
   hs.alert.show("Hello pad/")
 end)
 -- Not working?
-hs.hotkey.bind(hyper, "/", function()
+hs.hotkey.bind(hyper, "yen", function()
   hs.alert.show("Hello /")
 end)
 
