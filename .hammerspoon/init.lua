@@ -529,10 +529,6 @@ end)
 hs.hotkey.bind(hyper, "/", function()
   hs.alert.show("Hello /")
 end)
--- Not working? Why?
-hs.hotkey.bind(hyper, "[", function()
-  hs.alert.show("Hello [")
-end)
 
 hs.hotkey.bind({}, "f14", actions.screen.randomise_screensaver)
 
