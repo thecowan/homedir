@@ -41,22 +41,22 @@ Intercepted by something else (See 'avoid in-use keys' below): keypad-slash, key
 
 --[[
     Useful vacant keys:
-                                      0x34   -- shows as blank char in keycodes (prob usable)
-                                      0x36   -- doesn't show in keycodes; may not be usable?
-                                      0x42   -- shows as blank char in keycodes (prob usable)
-                                      0x44   -- no character shows in keycodes (maybe usable)
-                                      0x46   -- shows as blank char in keycodes (prob usable)
-      kVK_ANSI_KeypadClear          = 0x47,  -- shows character but doesn't type
-                                      0x4D   -- shows as blank char in keycodes (prob usable)
-      kVK_JIS_Yen                   = 0x5D,  -- shows character                     - international3 in karabiner
-      kVK_JIS_Underscore            = 0x5E,  -- shows character                     - international1 in Karabiner
-      kVK_JIS_KeypadComma           = 0x5F,  -- no character in Key Codes
-      kVK_JIS_Eisu                  = 0x66,  -- blank character                     - lang2 in Karabiner - also 1st Japanese string?
-      kVK_JIS_Kana                  = 0x68   -- blank character                     - lang1 in Karabiner - also 2nd Japanese string?
-                                      0x6C   -- shows as blank char in keycodes (prob usable)
-                                      0x6E   -- This is 'app key'? Not sure if this is usable
-                                      0x70   -- shows as blank char in keycodes (prob usable)
-      kVK_Help                      = 0x72,  -- shows character, but doesn't type
+                                      0x34   -- shows as blank char in keycodes, but hammerspoon receives when injected; likely useable
+                                      0x36   -- doesn't show in keycodes; may not be usable? Hammerspoon doesn't receive.
+                                      0x42   -- shows as blank char in keycodes, but hammerspoon receives when injected; likely useable
+                                      0x44   -- no character shows in keycodes, but hammerspoon receives when injected; likely useable
+                                      0x46   -- shows as blank char in keycodes, but hammerspoon receives when injected; likely useable
+      kVK_ANSI_KeypadClear          = 0x47,  -- shows character but doesn't type; hammerspoon sees as 'padclear'
+                                      0x4D   -- shows as blank char in keycodes, but hammerspoon receives when injected; likely useable
+      kVK_JIS_Yen                   = 0x5D,  -- shows character                     - international3 in karabiner; hammerspoon receives as 'yen'
+      kVK_JIS_Underscore            = 0x5E,  -- shows character                     - international1 in Karabiner; hammerspoon recieves as 'underscore'
+      kVK_JIS_KeypadComma           = 0x5F,  -- no character in Key Codes             hammerspoon receives as 'pad,'
+      kVK_JIS_Eisu                  = 0x66,  -- blank character                     - lang2 in Karabiner - also 1st Japanese string?; karabiner receives as 'eisu'
+      kVK_JIS_Kana                  = 0x68   -- blank character                     - lang1 in Karabiner - also 2nd Japanese string?; karabiner receives as 'kana'
+                                      0x6C   -- shows as blank char in keycodes, but hammerspoon receives when injected; likely useable
+                                      0x6E   -- Application Key (windows keyboard bottom/right). Comes through to Hammerspoon, so should be useable
+                                      0x70   -- shows as blank char in keycodes, but hammerspoon receives when injected; likely useable
+      kVK_Help                      = 0x72,  -- shows character, but doesn't type; hammerspoon receives as 'help'
                                       0x7F+  -- don't work
 
 ]]
@@ -513,15 +513,8 @@ end)
 hs.hotkey.bind({}, "f14", actions.screen.randomise_screensaver)
 
   hs.hotkey.bind(hyper, "5", function()
-    hs.eventtap.keyStroke({}, 0x5d)
+    hs.eventtap.keyStroke({}, 0x82)
   end)
-  hs.hotkey.bind(hyper, "6", function()
-    hs.eventtap.keyStroke({}, 0x5e)
-  end)
-  hs.hotkey.bind(hyper, "7", function()
-    hs.eventtap.keyStroke({}, 0x5f)
-  end)
-
 
 hs.hotkey.bind({}, "F20", actions.volume_mute)
 
@@ -554,6 +547,9 @@ keytap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
     elseif (key == 160) then
       print("Expose Key")
       return true
+    elseif (key == 110) then
+      print("Application Key")
+      return true
     elseif (key == 129) then
       print("Search Key")
       return true
@@ -563,7 +559,7 @@ keytap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
     end
     keymap = hs.keycodes.map[key]
     if keymap ~= nil then
-      -- print("Got key " .. keymap)
+      --print("Got key " .. keymap)
       return false
     end
     print("Unknown key with keycode: " .. key)
@@ -755,3 +751,5 @@ end
   -- Bind the Hyper key
   f17 = hs.hotkey.bind({}, 'F18', pressedModalHyper, releasedModalHyper)
 ]]
+
+
