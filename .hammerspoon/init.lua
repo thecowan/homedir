@@ -1,5 +1,11 @@
 local hyper = {"ctrl", "alt", "cmd", "shift"}
 keyModal = hs.hotkey.modal.new({}, nil)
+appKeyModal = hs.hotkey.modal.new({}, nil)
+
+
+customKeyDefs = {
+    application = 0x6E,
+}
 
 modalToHyperPassthrough = {
     -- don't need PAD* as that's done during binding
@@ -12,15 +18,23 @@ modalToHyperComplexPassthrough = {
   } 
 
 
-keyModal.pressed = function() 
+keyModal.pressed = function()
     keyModal:enter()
   end
-
-keyModal.released = function() 
-    keyModal:exit() 
+keyModal.released = function()
+    keyModal:exit()
 end
-
 hs.hotkey.bind({}, 'F19', keyModal.pressed, keyModal.released)
+
+
+appKeyModal.pressed = function()
+    appKeyModal:enter()
+  end
+appKeyModal.released = function()
+    appKeyModal:exit()
+end
+hs.hotkey.bind({}, customKeyDefs.application, appKeyModal.pressed, appKeyModal.released)
+
 
 hs.loadSpoon("SpoonInstall")
 Install=spoon.SpoonInstall
@@ -54,7 +68,6 @@ Intercepted by something else (See 'avoid in-use keys' below): keypad-slash, key
       kVK_JIS_Eisu                  = 0x66,  -- blank character                     - lang2 in Karabiner - also 1st Japanese string?; karabiner receives as 'eisu'
       kVK_JIS_Kana                  = 0x68   -- blank character                     - lang1 in Karabiner - also 2nd Japanese string?; karabiner receives as 'kana'
                                       0x6C   -- shows as blank char in keycodes, but hammerspoon receives when injected; likely useable
-                                      0x6E   -- Application Key (windows keyboard bottom/right). Comes through to Hammerspoon, so should be useable
                                       0x70   -- shows as blank char in keycodes, but hammerspoon receives when injected; likely useable
       kVK_Help                      = 0x72,  -- shows character, but doesn't type; hammerspoon receives as 'help'
                                       0x7F+  -- don't work
@@ -397,18 +410,29 @@ Install:andUse("KSheet",
 }})
 
 
+
 -- *****************************************************************
 -- App launching
 -- *****************************************************************
 
+-- Debug running apps to find the right names to use for activating
+-- hs.fnutils.each(hs.application.runningApplications(), function(app) print(app:title()) end)
+
 -- From https://github.com/heptal/dotfiles/blob/master/roles/hammerspoon/files/init.lua
 hs.fnutils.each({
-    { key = "t", app = "iTerm" },
-    { key = "e", app = "Sublime Text" },
-    { key = "c", app = "Google Chrome" },
-    { key = "s", app = "Slack" },
-    { key = "=", app = "Google Meet" },
     { key = "a", app = "Home Assistant" },
+    { key = "c", app = "Google Chrome" },
+    { key = "d", app = "Discord" },
+    { key = "e", app = "Sublime Text" },
+    { key = "f", app = "Finder" },
+    { key = "g", app = "Signal" },
+    { key = "j", app = "Jellyfin Media Player" },
+    { key = "k", app = "Kodi" },
+    { key = "o", app = "Sonos S1 Controller" },
+    { key = "s", app = "Slack" },
+    { key = "t", app = "iTerm", },
+    { key = "w", app = "WhatsApp" },
+    { key = "=", app = "Google Meet" },
 }, function(item)
 
     local appActivation = function()
@@ -421,9 +445,9 @@ hs.fnutils.each({
       end
     end
 
-    hs.hotkey.bind(hyper, item.key, appActivation)
+    -- hs.hotkey.bind(hyper, item.key, appActivation)
+    appKeyModal:bind({}, item.key, nil, appActivation)
 end)
-
 
 
 Install:andUse("Seal",
@@ -548,8 +572,9 @@ keytap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
       print("Expose Key")
       return true
     elseif (key == 110) then
-      print("Application Key")
-      return true
+      -- print("Application Key")
+      -- We use this for app mappings
+      return false
     elseif (key == 129) then
       print("Search Key")
       return true
@@ -751,5 +776,4 @@ end
   -- Bind the Hyper key
   f17 = hs.hotkey.bind({}, 'F18', pressedModalHyper, releasedModalHyper)
 ]]
-
 
