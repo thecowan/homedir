@@ -104,6 +104,40 @@ local screensavers = {
     {"Ephemeral",      "/Users/cow/Library/Screen Savers/Ephemeral.saver"},
     {"Electric Sheep", "/Library/Screen Savers/Electric Sheep.saver"},
 }
+
+-- Stolen from https://gist.github.com/heptal/50998f66de5aba955c00
+ampOnIcon = [[ASCII:
+.....1a..........AC..........E
+..............................
+......4.......................
+1..........aA..........CE.....
+e.2......4.3...........h......
+..............................
+..............................
+.......................h......
+e.2......6.3..........t..q....
+5..........c..........s.......
+......6..................q....
+......................s..t....
+.....5c.......................
+]]
+
+ampOffIcon = [[ASCII:
+.....1a.....x....AC.y.......zE
+..............................
+......4.......................
+1..........aA..........CE.....
+e.2......4.3...........h......
+..............................
+..............................
+.......................h......
+e.2......6.3..........t..q....
+5..........c..........s.......
+......6..................q....
+......................s..t....
+...x.5c....y.......z..........
+]]
+
 -- *****************************************************************
 -- Shared functions
 -- *****************************************************************
@@ -197,6 +231,8 @@ spoon.MiroWindowsManager:bindHotkeys({
     nextscreen = {hyper, "n"}
 })
 
+
+
 absWindowBindings = {
     -- Left and right halves
     {"pad0",     {},        21,   actions.window.half_left},
@@ -265,31 +301,37 @@ mousetap:start()
 
 
 
-
 -- *****************************************************************
--- Unsorted
+-- Debugging/system
 -- *****************************************************************
 
-
-
+hs.loadSpoon("ReloadConfiguration")
+spoon.ReloadConfiguration:start()
 
 
 hs.hotkey.bind(hyper, "W", actions.hello_world)
+-- Not working?
+hs.hotkey.bind(hyper, "pad/", function()
+  hs.alert.show("Hello pad/")
+end)
+-- Not working?
+hs.hotkey.bind(hyper, "/", function()
+  hs.alert.show("Hello /")
+end)
+-- Not working? Why?
+hs.hotkey.bind(hyper, "[", function()
+  hs.alert.show("Hello [")
+end)
 
-  hs.hotkey.bind(hyper, "pad/", function()
-    hs.alert.show("Hello pad/")
-  end)
-  hs.hotkey.bind(hyper, "/", function()
-    hs.alert.show("Hello /")
-  end)
-  hs.hotkey.bind(hyper, "[", function()
-    hs.alert.show("Hello [")
-  end)
 
+
+
+-- *****************************************************************
+-- Screen/display management
+-- *****************************************************************
 
 hs.hotkey.bind(hyper, "L", actions.screen.lock)
--- hs.hotkey.bind({}, 0x68, actions.screen.randomise_screensaver)
-hs.hotkey.bind({}, "f14", actions.screen.randomise_screensaver)
+
 
 function caffeinateCallback(eventType)
     if (eventType == hs.caffeinate.watcher.screensDidSleep) then
@@ -305,9 +347,53 @@ function caffeinateCallback(eventType)
       --bluetoothSwitch(1)
     end
 end
-
 caffeinateWatcher = hs.caffeinate.watcher.new(caffeinateCallback)
 caffeinateWatcher:start()
+
+
+
+
+-- caffeine replacement
+local caffeine = hs.menubar.new()
+
+function setCaffeineDisplay(state)
+    if state then
+        caffeine:setIcon(ampOnIcon)
+    else
+        caffeine:setIcon(ampOffIcon)
+    end
+end
+
+function caffeineClicked()
+    setCaffeineDisplay(hs.caffeinate.toggle("displayIdle"))
+end
+
+if caffeine then
+    caffeine:setClickCallback(caffeineClicked)
+    setCaffeineDisplay(hs.caffeinate.get("displayIdle"))
+end
+
+hs.hotkey.bind(hyper, "Z", function()
+    caffeineClicked()
+  end)
+
+
+
+
+
+
+
+
+
+
+
+-- *****************************************************************
+-- Unsorted
+-- *****************************************************************
+
+
+hs.hotkey.bind({}, "f14", actions.screen.randomise_screensaver)
+
 
 
 hs.hotkey.bind({}, "F20", actions.volume_mute)
@@ -339,13 +425,6 @@ end
   f17 = hs.hotkey.bind({}, 'F18', pressedModalHyper, releasedModalHyper)
 ]]
   
-hs.hotkey.bind(hyper, "H", function()
-    local win = hs.window.focusedWindow()
-    local f = win:frame()
-  
-    f.x = f.x - 10
-    win:setFrame(f)
-  end)
 
   hs.hotkey.bind(hyper, "5", function()
     hs.eventtap.keyStroke({}, 0x5d)
@@ -396,8 +475,6 @@ if caffeine then
     setCaffeineDisplay(hs.caffeinate.get("displayIdle"))
 end
 ]]
-  hs.loadSpoon("ReloadConfiguration")
-  spoon.ReloadConfiguration:start()
 
 
 
@@ -409,62 +486,7 @@ end
   })
 
 
--- Stolen from https://gist.github.com/heptal/50998f66de5aba955c00
-  ampOnIcon = [[ASCII:
-.....1a..........AC..........E
-..............................
-......4.......................
-1..........aA..........CE.....
-e.2......4.3...........h......
-..............................
-..............................
-.......................h......
-e.2......6.3..........t..q....
-5..........c..........s.......
-......6..................q....
-......................s..t....
-.....5c.......................
-]]
 
-ampOffIcon = [[ASCII:
-.....1a.....x....AC.y.......zE
-..............................
-......4.......................
-1..........aA..........CE.....
-e.2......4.3...........h......
-..............................
-..............................
-.......................h......
-e.2......6.3..........t..q....
-5..........c..........s.......
-......6..................q....
-......................s..t....
-...x.5c....y.......z..........
-]]
-
--- caffeine replacement
-local caffeine = hs.menubar.new()
-
-function setCaffeineDisplay(state)
-    if state then
-        caffeine:setIcon(ampOnIcon)
-    else
-        caffeine:setIcon(ampOffIcon)
-    end
-end
-
-function caffeineClicked()
-    setCaffeineDisplay(hs.caffeinate.toggle("displayIdle"))
-end
-
-if caffeine then
-    caffeine:setClickCallback(caffeineClicked)
-    setCaffeineDisplay(hs.caffeinate.get("displayIdle"))
-end
-
-hs.hotkey.bind(hyper, "Z", function()
-    caffeineClicked()
-  end)
 
 -- From https://github.com/heptal/dotfiles/blob/master/roles/hammerspoon/files/init.lua
   hs.fnutils.each({
