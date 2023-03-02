@@ -24,7 +24,7 @@ function linkdir() {
     case $file in
     . | .. )
       ;;
-    README | mklinks.sh | .git | .nolink )
+    README | mklinks.sh | .git | .nolink | .gitignore )
       ;;
     * )
       cd $relhome
