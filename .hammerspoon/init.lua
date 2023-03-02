@@ -299,6 +299,18 @@ end)
 mousetap:start()
 
 
+Install:andUse("WindowScreenLeftAndRight",
+{
+  config = {
+    animationDuration = 0.3
+  },
+  hotkeys = {
+     screen_left = { hyper, "pageup" },
+     screen_right= { hyper, "pagedown" },
+  },
+--                 loglevel = 'debug'
+}
+)
 
 
 -- *****************************************************************
@@ -310,18 +322,6 @@ spoon.ReloadConfiguration:start()
 
 
 hs.hotkey.bind(hyper, "W", actions.hello_world)
--- Not working?
-hs.hotkey.bind(hyper, "pad/", function()
-  hs.alert.show("Hello pad/")
-end)
--- Not working?
-hs.hotkey.bind(hyper, "/", function()
-  hs.alert.show("Hello /")
-end)
--- Not working? Why?
-hs.hotkey.bind(hyper, "[", function()
-  hs.alert.show("Hello [")
-end)
 
 
 
@@ -379,124 +379,37 @@ hs.hotkey.bind(hyper, "Z", function()
 
 
 
+-- *****************************************************************
+-- Keyboard & Input
+-- *****************************************************************
+hs.loadSpoon("Emojis")
+
+spoon.Emojis:bindHotkeys({
+  toggle = {hyper, "j"},
+})
 
 
 
-
-
-
+Install:andUse("KSheet",
+               {
+                 hotkeys = {
+                   toggle = { hyper, "'" }
+}})
 
 
 -- *****************************************************************
--- Unsorted
+-- App launching
 -- *****************************************************************
-
-
-hs.hotkey.bind({}, "f14", actions.screen.randomise_screensaver)
-
-
-
-hs.hotkey.bind({}, "F20", actions.volume_mute)
-
-  hs.hotkey.bind({"ctrl"}, "F20", function()
-    hs.alert.show("shift-mute!")
-  end)
-
-
-  --[[
-k = hs.hotkey.modal.new({})
-k:bind({}, 'f', nil, function() hs.eventtap.keyStroke(hyper, 'f') end)
-
-pressedModalHyper = function()
-    k.triggered = false
-    k:enter()
-end
-  
-  -- Leave Hyper Mode when F18 (Hyper/Capslock) is pressed,
-  --   send ESCAPE if no other keys are pressed.
-  releasedModelHyper = function()
-    k:exit()
-    if not k.triggered then
-      hs.eventtap.keyStroke({}, 'ESCAPE')
-    end
-  end
-  
-  -- Bind the Hyper key
-  f17 = hs.hotkey.bind({}, 'F18', pressedModalHyper, releasedModalHyper)
-]]
-  
-
-  hs.hotkey.bind(hyper, "5", function()
-    hs.eventtap.keyStroke({}, 0x5d)
-  end)
-  hs.hotkey.bind(hyper, "6", function()
-    hs.eventtap.keyStroke({}, 0x5e)
-  end)
-  hs.hotkey.bind(hyper, "7", function()
-    hs.eventtap.keyStroke({}, 0x5f)
-  end)
-
-
-
-
-hs.hotkey.bind(hyper, "M", function()
-    local a, b, c = hs.http.doRequest("http://localhost:8249/toggle-mute", "POST", nil, {
-        ["x-mutesync-api-version"] = "1",
-        ["Authorization"] = "Token JHSKISRHJFKRQAIU",
-        }) 
-    local j = hs.json.decode(b)
-    if j["data"]["in_meeting"] then
-        if j["data"]["muted"] then
-            hs.alert.show("Microphone MUTED", {textColor = { red = 1 }})
-        else
-            hs.alert.show("Microphone LIVE", {textColor = { green = 1 }})
-        end
-    else
-        hs.alert.show("Not in meeting")
-    end
-end)  
-            
-  --[[
-caffeine = hs.menubar.new()
-function setCaffeineDisplay(state)
-    if state then
-        caffeine:setTitle("AWAKE")
-    else
-        caffeine:setTitle("SLEEPY")
-    end
-end
-
-function caffeineClicked()
-    setCaffeineDisplay(hs.caffeinate.toggle("displayIdle"))
-end
-
-if caffeine then
-    caffeine:setClickCallback(caffeineClicked)
-    setCaffeineDisplay(hs.caffeinate.get("displayIdle"))
-end
-]]
-
-
-
-  hs.loadSpoon("Emojis")
-  
-  hs.window.animationDuration = 0.3
-  spoon.Emojis:bindHotkeys({
-    toggle = {hyper, "j"},
-  })
-
-
-
 
 -- From https://github.com/heptal/dotfiles/blob/master/roles/hammerspoon/files/init.lua
-  hs.fnutils.each({
+hs.fnutils.each({
     { key = "t", app = "iTerm" },
     { key = "e", app = "Sublime Text" },
     { key = "c", app = "Google Chrome" },
     { key = "s", app = "Slack" },
     { key = "=", app = "Google Meet" },
     { key = "a", app = "Home Assistant" },
-  }, function(item)
+}, function(item)
 
     local appActivation = function()
       hs.application.launchOrFocus(item.app)
@@ -509,27 +422,9 @@ end
     end
 
     hs.hotkey.bind(hyper, item.key, appActivation)
-  end)
+end)
 
-    
-Install:andUse("WindowScreenLeftAndRight",
-{
-  config = {
-    animationDuration = 0.3
-  },
-  hotkeys = {
-     screen_left = { hyper, "pageup" },
-     screen_right= { hyper, "pagedown" },
-  },
---                 loglevel = 'debug'
-}
-) 
 
-Install:andUse("KSheet",
-               {
-                 hotkeys = {
-                   toggle = { hyper, "'" }
-}})
 
 Install:andUse("Seal",
                {
@@ -548,7 +443,144 @@ Install:andUse("Seal",
                }
 )
 
- 
+
+
+
+-- *****************************************************************
+-- App-specific handling
+-- *****************************************************************
+hs.loadSpoon("AppBindings")
+
+spoon.AppBindings:bind('Slack', {
+--  |----FROM----| |------TO------|
+--  |meta  ,  key| |meta   ,  key |
+  { hyper, '\\', {'cmd'}, 'k' },
+})
+spoon.AppBindings:bind('Sublime Text', {
+  { hyper, '\\', {'cmd'}, 'p' },
+})
+spoon.AppBindings:bind('Discord', {
+  { hyper, '\\', {'cmd'}, 'k' },
+})
+
+
+
+
+-- *****************************************************************
+-- Media/video/audio
+--
+-- *****************************************************************
+
+hs.hotkey.bind(hyper, "M", function()
+    local a, b, c = hs.http.doRequest("http://localhost:8249/toggle-mute", "POST", nil, {
+        ["x-mutesync-api-version"] = "1",
+        ["Authorization"] = "Token JHSKISRHJFKRQAIU",
+        }) 
+    local j = hs.json.decode(b)
+    if j["data"]["in_meeting"] then
+        if j["data"]["muted"] then
+            hs.alert.show("Microphone MUTED", {textColor = { red = 1 }})
+        else
+            hs.alert.show("Microphone LIVE", {textColor = { green = 1 }})
+        end
+    else
+        hs.alert.show("Not in meeting")
+    end
+end)  
+
+
+
+
+
+
+-- *****************************************************************
+-- Testing/debugging
+-- *****************************************************************
+
+-- Not working?
+hs.hotkey.bind(hyper, "pad/", function()
+  hs.alert.show("Hello pad/")
+end)
+-- Not working?
+hs.hotkey.bind(hyper, "/", function()
+  hs.alert.show("Hello /")
+end)
+-- Not working? Why?
+hs.hotkey.bind(hyper, "[", function()
+  hs.alert.show("Hello [")
+end)
+
+hs.hotkey.bind({}, "f14", actions.screen.randomise_screensaver)
+
+  hs.hotkey.bind(hyper, "5", function()
+    hs.eventtap.keyStroke({}, 0x5d)
+  end)
+  hs.hotkey.bind(hyper, "6", function()
+    hs.eventtap.keyStroke({}, 0x5e)
+  end)
+  hs.hotkey.bind(hyper, "7", function()
+    hs.eventtap.keyStroke({}, 0x5f)
+  end)
+
+
+hs.hotkey.bind({}, "F20", actions.volume_mute)
+
+  hs.hotkey.bind({"ctrl"}, "F20", function()
+    hs.alert.show("shift-mute!")
+  end)
+
+tap = hs.eventtap.new({hs.eventtap.event.types.NSSystemDefined}, function(event)
+    print("event tap debug got event!")
+    if DEBUG_TAP then
+        print("event tap debug got event:")
+        print(hs.inspect.inspect(event:getRawEventData()))
+        print(hs.inspect.inspect(event:getFlags()))
+        print(hs.inspect.inspect(event:systemKey()))
+    end
+    local sys_key_event = event:systemKey()
+    local delete_event = false
+    if not sys_key_event or not sys_key_event.down then
+        return false
+    end
+end)
+tap:start()
+
+keytap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
+    --print("key tap debug got event!")
+    local key = event:getKeyCode()
+    if (key == 176) then
+      print("Dictation Key")
+      return true
+    elseif (key == 160) then
+      print("Expose Key")
+      return true
+    elseif (key == 129) then
+      print("Search Key")
+      return true
+    elseif (key == 179) then
+      print("Emoji Key")
+      return false
+    end
+    keymap = hs.keycodes.map[key]
+    if keymap ~= nil then
+      -- print("Got key " .. keymap)
+      return false
+    end
+    print("Unknown key with keycode: " .. key)
+    return false
+end)
+keytap:start()
+
+
+
+
+
+-- *****************************************************************
+-- RecursiveBinder
+-- *****************************************************************
+-- TODO: do I want this? If so, fix mappings
+
+
 -- All stolen from https://github.com/snowe2010/dotfiles
 Install:andUse("RecursiveBinder", {
     fn = function(s)
@@ -643,92 +675,16 @@ paul@mailcow.com]]
     end
 })
 
--- Stolen from https://tighten.com/blog/how-to-train-your-keyboard/
---[[hs.loadSpoon('Hyper')
-hs.loadSpoon('Helpers')
- 
-slack = 'com.tinyspeck.slackmacgap'
- 
-hyper:app(slack)
-    :action('open', {
-        default = combo({'cmd'}, 'k'),
-    })
- 
-hyper:app('fallback')
-    :action('open', {
-        default = combo({'cmd'}, 'p'),
-    })
-]]
-
-hs.loadSpoon("AppBindings")
-spoon.AppBindings:bind('Slack', {
---  |----FROM----| |------TO------|
---  |meta  ,  key| |meta   ,  key |
-  { hyper, '\\', {'cmd'}, 'k' },
-})
-spoon.AppBindings:bind('Sublime Text', {
-  { hyper, '\\', {'cmd'}, 'p' },
-})
-spoon.AppBindings:bind('Discord', {
-  { hyper, '\\', {'cmd'}, 'k' },
-})
 
 
 
--- MPD_COMMANDS = {PLAY = "toggle"; FAST = "next"; REWIND = "prev"}
--- AIRFOIL_EVENTS = {SOUND_UP = "+", SOUND_DOWN = "-"}
-tap = hs.eventtap.new({hs.eventtap.event.types.NSSystemDefined}, function(event)
-    print("event tap debug got event!")
-    if DEBUG_TAP then
-        print("event tap debug got event:")
-        print(hs.inspect.inspect(event:getRawEventData()))
-        print(hs.inspect.inspect(event:getFlags()))
-        print(hs.inspect.inspect(event:systemKey()))
-    end
-    local sys_key_event = event:systemKey()
-    local delete_event = false
-    if not sys_key_event or not sys_key_event.down then
-        return false
-    end
---[[    elseif MPD_COMMANDS[sys_key_event.key] and not sys_key_event['repeat']
-    then
-        print("received media event, calling as-mpc")
-        hs.execute("~/bin/as-mpc " .. MPD_COMMANDS[sys_key_event.key])
-    elseif AIRFOIL_EVENTS[sys_key_event.key] and event:getFlags().ctrl then
-        hs.osascript.applescript(script)
-        delete_event = true
-    end
-    return delete_event
-    ]]--
-end)
-tap:start()
 
-keytap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
-    --print("key tap debug got event!")
-    local key = event:getKeyCode()
-    if (key == 176) then
-      print("Dictation Key")
-      return true
-    elseif (key == 160) then
-      print("Expose Key")
-      return true
-    elseif (key == 129) then
-      print("Search Key")
-      return true
-    elseif (key == 179) then
-      print("Emoji Key")
-      return false
-    end
-    keymap = hs.keycodes.map[key]
-    if keymap ~= nil then
-      -- print("Got key " .. keymap)
-      return false
-    end
-    print("Unknown key with keycode: " .. key)
-    return false
-end)
-keytap:start()
 
+
+
+-- *****************************************************************
+-- Final cleanup
+-- *****************************************************************
 
 for i, b in ipairs(modalToHyperPassthrough) do
     print(b)
@@ -753,3 +709,49 @@ for i, b in ipairs(modalToHyperComplexPassthrough) do
       end)
 end
 
+
+
+
+
+-- *****************************************************************
+-- Graveyard - to evaluage
+-- *****************************************************************
+-- Stolen from https://tighten.com/blog/how-to-train-your-keyboard/
+--[[hs.loadSpoon('Hyper')
+hs.loadSpoon('Helpers')
+ 
+slack = 'com.tinyspeck.slackmacgap'
+
+hyper:app(slack)
+    :action('open', {
+        default = combo({'cmd'}, 'k'),
+    })
+
+hyper:app('fallback')
+    :action('open', {
+        default = combo({'cmd'}, 'p'),
+    })
+]]
+
+
+  --[[
+k = hs.hotkey.modal.new({})
+k:bind({}, 'f', nil, function() hs.eventtap.keyStroke(hyper, 'f') end)
+
+pressedModalHyper = function()
+    k.triggered = false
+    k:enter()
+end
+
+  -- Leave Hyper Mode when F18 (Hyper/Capslock) is pressed,
+  --   send ESCAPE if no other keys are pressed.
+  releasedModelHyper = function()
+    k:exit()
+    if not k.triggered then
+      hs.eventtap.keyStroke({}, 'ESCAPE')
+    end
+  end
+
+  -- Bind the Hyper key
+  f17 = hs.hotkey.bind({}, 'F18', pressedModalHyper, releasedModalHyper)
+]]
