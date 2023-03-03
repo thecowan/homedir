@@ -94,7 +94,6 @@ https://gist.github.com/dalemanthei/dde8bccb22c3a2d3487a6e7d77be33f5
 https://github.com/evantravers/Hyper.spoon
 https://apple.stackexchange.com/questions/317548/how-do-i-get-the-calculator-button-on-a-microsoft-sculpt-keyboard-working
 Soma station: https://github.com/heptal/dotfiles/blob/master/roles/hammerspoon/files/mpd.lua
-avoid in-use keys: https://github.com/snowe2010/dotfiles/blob/master/karabiner.config/karabiner.json
 Turn off BT when locked to save battery: https://blog.krybot.com/a?ID=00950-accedada-7ebb-4010-857f-d1aaa9c7f293
 URL dispatching: https://zzamboni.org/post/my-hammerspoon-configuration-with-commentary/
 https://github.com/dbalatero/HyperKey.spoon
@@ -226,6 +225,8 @@ local actions = {
     volume_up   = function() sendSystemKey("SOUND_UP") end,
     volume_down = function() sendSystemKey("SOUND_DOWN") end,
     volume_mute = function() sendSystemKey("MUTE") end,
+    tab_next    = function() hs.eventtap.keyStroke({"cmd", "shift"}, "]") end,
+    tab_prev    = function() hs.eventtap.keyStroke({"cmd", "shift"}, "[") end,
 }
 
 
@@ -409,7 +410,9 @@ Install:andUse("KSheet",
                    toggle = { hyper, "'" }
 }})
 
-
+-- Need to use release, not press, to send the same key
+hs.hotkey.bind(hyper, "[", nil, actions.tab_prev)
+hs.hotkey.bind(hyper, "]", nil, actions.tab_next)
 
 -- *****************************************************************
 -- App launching
