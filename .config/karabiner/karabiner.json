@@ -44,6 +44,37 @@
                         ]
                     },
                     {
+                        "description": "sysdiagnose keypad_slash -> lang2",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "keypad_slash",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "left_gui",
+                                            "left_control",
+                                            "left_alt",
+                                            "left_shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "lang2",
+                                        "modifiers": [
+                                            "left_gui",
+                                            "left_control",
+                                            "left_alt",
+                                            "left_shift"
+                                        ],
+                                        "repeat": true
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "sysdiagnose comma -> international1",
                         "manipulators": [
                             {
