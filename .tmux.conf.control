@@ -1,0 +1,14 @@
+set -g default-terminal screen-256color
+
+#setw -g automatic-rename on
+
+#set-option -g history-limit 25000
+
+#bind-key a set-window-option synchronize-panes
+#
+#set -g update-environment -r
+#
+#set-option -sg  escape-time 0
+
+#set -g set-titles on
+#set -g set-titles-string "#T"
