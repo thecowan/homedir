@@ -67,3 +67,5 @@ fi
 alias rmt="rm -v ~/Downloads/*.torrent"
 
 alias fuck='sudo $(history -p \!\!)'
+
+eval $(keychain --eval id_rsa --eval id_ed25519 --inherit any --noask)
