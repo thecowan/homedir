@@ -1,5 +1,15 @@
 #!/bin/bash
 
+function loginfo() {
+  if [ -z "$errors_only" ]; then
+    echo "$1"
+  fi
+}
+function logerror() {
+  echo "$1"
+  ret=1
+}
+
 function linkdir() {
   local base=$1
   local rel=$2
@@ -11,9 +21,9 @@ function linkdir() {
   local relhome=$home$rel
 
   cd $home
-  echo "${pad}Checking symlinks in $relhome relative to $relpath..."
+  loginfo "${pad}Checking symlinks in $relhome relative to $relpath..."
   if [ ! -d $relhome ]; then
-    echo "${pad} $relhome doesn't exist, creating"
+    loginfo "${pad} $relhome doesn't exist, $creating"
     mkdir $relhome
   fi
 
@@ -29,32 +39,46 @@ function linkdir() {
     * )
       cd $relhome
       local target=$relprefix$relpath$file
-      echo -n "${pad}Checking $file for link to $target... "
+      pre="${pad}Checking $file for link to $target..."
       if [ -d $target -a -f $target/.nolink ]; then
-        echo 'directory with .nolink, recursing.'
+        loginfo "$pre directory with .nolink, recursing."
         linkdir $base $rel$file/ "../$relprefix" $home "$pad  "
         cd $relhome
       elif [ -h $file ]; then
         local existing=$(readlink $file)
         if [ "$existing" == "$target" ]; then
-          echo "OK (already existing)"
+          loginfo "$pre OK (already existing)"
         else
-          echo "ERROR: already links to $existing"
+          logerror "$pre ERROR: already links to $existing"
         fi 
       elif [ -e $file ]; then
-        echo "ERROR: already exists" 
+        logerror "$pre ERROR: already exists" 
       else
-        echo "CREATING"
-        ln -s $target $file
+        logerror "$pre$creating"
+	if [ -z "$dryrun" ]; then
+          ln -s $target $file
+	fi
       fi
     esac
   done
 }
+dryrun=''
+creating='creating'
+errors_only=''
+ret=0
+while getopts 'en' flag; do
+  case "${flag}" in
+    e) errors_only='true' ;;
+    n) dryrun='true' creating='not creating (DRY-RUN)' ;;
+  esac
+done
 
 BASEPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 shopt -s dotglob
 
+
 linkdir $BASEPATH / "" $HOME ""
 
 chmod 700 ~/.ssh/control
+exit $ret
 
