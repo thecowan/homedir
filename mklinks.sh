@@ -52,7 +52,15 @@ function linkdir() {
           logerror "$pre ERROR: already links to $existing"
         fi 
       elif [ -e $file ]; then
-        logerror "$pre ERROR: already exists" 
+	if [ -z "$force" ]; then
+          logerror "$pre ERROR: already exists" 
+	else
+          logerror "$pre already exists, -f supplied: deleting and $creating" 
+	  if [ -z "$dryrun" ]; then
+	    rm $file
+            ln -s $target $file
+	  fi
+	fi
       else
         logerror "$pre$creating"
 	if [ -z "$dryrun" ]; then
@@ -65,10 +73,12 @@ function linkdir() {
 dryrun=''
 creating='creating'
 errors_only=''
+force=''
 ret=0
-while getopts 'en' flag; do
+while getopts 'efn' flag; do
   case "${flag}" in
     e) errors_only='true' ;;
+    f) force='true' ;;
     n) dryrun='true' creating='not creating (DRY-RUN)' ;;
   esac
 done
