@@ -16,3 +16,5 @@
 	default = matching
 [google]
 	lastUpdateCheck = 20141020000000
+[init]
+	defaultBranch = main
