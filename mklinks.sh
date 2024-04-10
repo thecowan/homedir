@@ -55,7 +55,7 @@ function linkdir() {
 	if [ -z "$force" ]; then
           logerror "$pre ERROR: already exists" 
 	else
-          logerror "$pre already exists, -f supplied: deleting and $creating" 
+          loginfo "$pre already exists, -f supplied: deleting and $creating" 
 	  if [ -z "$dryrun" ]; then
 	    rm $file
             ln -s $target $file
