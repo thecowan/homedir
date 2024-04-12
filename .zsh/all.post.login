@@ -11,7 +11,8 @@ export EDITOR=vim
 export VISUAL=${EDITOR}
 export PAGER="less"
 # Not using -N because of the weird linewrapping in man
-export LESS=-XNF
+export LESS=-XRNF
+alias man='man -P "less -+N"'
 export BLOCKSIZE=1024
 
 
