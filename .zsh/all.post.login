@@ -34,9 +34,9 @@ zstyle ':vcs_info:svn:*' formats '%b ' '∫' ' on '
 #
 #
 if [ "$color_prompt" = full ]; then
-  eval $(dircolors ~/.dir_colors/dircolors.256dark)
+  command -v dircolors > /dev/null 2>&1 && eval $(dircolors ~/.dir_colors/dircolors.256dark)
 else
-  eval "`dircolors -b 2>/dev/null`"
+  command -v dircolors > /dev/null 2>&1 && eval "`dircolors -b 2>/dev/null`"
 fi
 
 
@@ -96,4 +96,5 @@ alias tmux='tmux -f ~/.tmux.conf.interactive'
 
 alias fuck='sudo $(history -p \!\!)'
 
-eval $(keychain --eval id_rsa --eval id_ed25519 --inherit any --noask -q)
+command -v keychain > /dev/null 2>&1 && eval $(keychain --eval id_rsa --eval id_ed25519 --inherit any --noask -q)
+command -v atuin > /dev/null 2>&1 && eval "$(atuin init zsh)"
