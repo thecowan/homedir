@@ -1,0 +1,71 @@
+#!/bin/zsh
+
+
+function appendToAlias
+{
+  if [ ${#@} -ge 2 ]; then
+    args=($@); unset args[0]
+    ALIAS_CMD=`alias $1 2>/dev/null || echo "alias $1='$1'"`
+    ALIAS_CMD="${ALIAS_CMD%\'} ${args[@]}'"
+    eval "$ALIAS_CMD"
+  fi
+}
+
+function toLower() {
+  echo $1 | tr "[:upper:]" "[:lower:]"
+}
+
+function toUpper() {
+  echo $1 | tr "[:lower:]" "[:upper:]"
+}
+
+function getConnectingHost
+{
+  foo=`tty | sed "s/\/dev\///"` && who | grep -E "\W$foo\W" | sed -r "s/.*\((.*)\)/\1/"
+}
+
+
+tmuxs() {
+  local session=${1:-default}
+  tmux has-session -t $session && tmux attach-session -t $session || tmux new-session -s $session
+}
+
+
+# stolen from krs
+settitle ()
+{
+  MESSAGE=$1
+
+  case $TERM in
+    xterm* | screen* | eterm-color* | gnome* )
+      echo -e -n "\033]2;$USER@$HOST:$MESSAGE\007"
+      PS1_NO_TITLEBAR=1
+      ;;
+    *)
+      # do nothing
+      ;;
+  esac
+
+   [ -z "$TMUX_PANE" ] || tmux rename-window "$MESSAGE"
+}
+
+# stolen from krs
+unsettitle ()
+{
+  unset PS1_NO_TITLEBAR
+  [ -z "$TMUX_PANE" ] || tmux set-window-option automatic-rename on
+}
+
+dice() {
+  for var in "$@"
+  do
+    echo paul >> "$var/.dice"
+  done
+}
+nodice() {
+  for var in "$@"
+  do
+    echo '!paul' >> "$1/.dice"
+  done
+}
+
