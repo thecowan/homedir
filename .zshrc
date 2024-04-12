@@ -8,7 +8,7 @@ bindkey -e
 zstyle :compinstall filename '$HOME/.zshrc'
 
 autoload -Uz compinit
-compinit
+compinit -C
 # End of lines added by compinstall
 #
 
@@ -35,9 +35,11 @@ DOMAIN=${HOSTNAME#*.}
 NETWORKS=()
 while [[ "$HOST" != "$DOMAIN" && -n $DOMAIN ]]
 do
-  [ "$DOMAIN" == "${NETWORKS[0]}" ] && break
+  [[ "$DOMAIN" == "${NETWORKS[0]}" ]] && break
   NETWORKS=( "$DOMAIN" "${NETWORKS[@]}" )
-  DOMAIN=${DOMAIN#*.}
+  NEWDOMAIN=${DOMAIN#*.}
+  [[ "$DOMAIN" == "$NEWDOMAIN" ]] && break
+  DOMAIN=${NEWDOMAIN}
 done
 DOMAIN=
 
