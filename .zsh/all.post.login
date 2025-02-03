@@ -92,6 +92,44 @@ alias la='ls -A'
 alias l='ls -CF'
 
 
+# Sane Defaults
+alias cp='cp -iv'
+alias mv='mv -iv'
+alias mkdir='mkdir -pv'
+alias grep='grep --color=always'
+alias ax='chmod a+x'
+
+alias ..='cd ../'
+alias ...='cd ../../'
+alias .3='cd ../../../'
+alias .4='cd ../../../../'
+alias .5='cd ../../../../../'
+alias .6='cd ../../../../../../'
+alias ~="cd ~"
+
+
+# Prefer `prettyping` over `ping` when installed
+[[ "$(command -v prettyping)" ]] \
+    && alias ping="prettyping --nolegend"
+# Prefer `htop` over `top` when installed
+[[ "$(command -v htop)" ]] \
+    && alias top="htop"
+# Prefer `bat` over `cat` when installed
+[[ "$(command -v bat)" ]] \
+    && alias cat="bat"
+
+if eza --icons &>/dev/null; then
+    alias ls='eza --git --icons'
+    alias ll='eza --git --icons -lF'
+elif command -v eza &>/dev/null; then
+    alias ls='eza --git'
+    alias ll='eza --git -lF'
+elif [[ $(command -v ls) =~ gnubin || $OSTYPE =~ linux ]]; then
+    alias ls="ls --color=auto"
+else
+    alias ls="ls -G"
+fi
+
 alias tmux='tmux -f ~/.tmux.conf.interactive'
 
 alias fuck='sudo $(history -p \!\!)'
