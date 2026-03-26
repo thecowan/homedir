@@ -134,6 +134,7 @@ alias tmux='tmux -f ~/.tmux.conf.interactive'
 
 alias fuck='sudo $(history -p \!\!)'
 
+alias stackps='docker stack ps -f "desired-state=running"'
 command -v toilet > /dev/null 2>&1 && print -P "$USER_COLOR"; toilet -f smblock $HOST; print -P "$USER_COLOR"
 
 command -v keychain > /dev/null 2>&1 && eval $(keychain --eval id_rsa --eval id_ed25519 --inherit any --noask -q)
