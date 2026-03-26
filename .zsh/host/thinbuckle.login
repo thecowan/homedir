@@ -1,3 +1,3 @@
 if [ "$color_prompt" = full ]; then
-  USER_COLOR=%F{32}
+  USER_COLOR=%F{50}
 fi
