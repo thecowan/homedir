@@ -135,6 +135,9 @@ alias tmux='tmux -f ~/.tmux.conf.interactive'
 alias fuck='sudo $(history -p \!\!)'
 
 alias stackps='docker stack ps -f "desired-state=running" -f "desired-state=ready"'
+function stackconfig() { filename=$(basename -- "$1"); stack="${filename%.*}"; envfile=".dummy.env"; candidate=".${stack}.env"; if test -f "${candidate}"; then echo "Using env file ${candidate}"; envfile="${candidate}"; fi; (set -a; source $envfile; set +a; docker stack config --compose-file "$1") }
+function stackdeploy() { filename=$(basename -- "$1"); stack="${filename%.*}"; envfile=".dummy.env"; candidate=".${stack}.env"; if test -f "${candidate}"; then echo "Using env file ${candidate}"; envfile="${candidate}"; fi; (set -a; source $envfile; set +a; docker stack deploy --detach=true --compose-file "$1" $stack) }
+
 command -v toilet > /dev/null 2>&1 && print -P "$USER_COLOR"; toilet -f smblock $HOST; print -P "$USER_COLOR"
 
 command -v keychain > /dev/null 2>&1 && eval $(keychain --eval id_rsa --eval id_ed25519 --inherit any --noask -q)
