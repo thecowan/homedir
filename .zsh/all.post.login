@@ -139,3 +139,5 @@ command -v toilet > /dev/null 2>&1 && print -P "$USER_COLOR"; toilet -f smblock 
 
 command -v keychain > /dev/null 2>&1 && eval $(keychain --eval id_rsa --eval id_ed25519 --inherit any --noask -q)
 command -v atuin > /dev/null 2>&1 && eval "$(atuin init zsh)"
+
+source ${HOME}/.zsh/.iterm2_shell_integration.zsh
