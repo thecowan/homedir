@@ -1,5 +1,7 @@
 set quiet
 
+set-environment -g SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
+
 set -g base-index 1
 set -g pane-base-index 1
 set -g default-terminal screen-256color
