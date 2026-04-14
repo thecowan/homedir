@@ -137,6 +137,24 @@ alias fuck='sudo $(history -p \!\!)'
 alias stackps='docker stack ps -f "desired-state=running" -f "desired-state=ready"'
 function stackconfig() { filename=$(basename -- "$1"); stack="${filename%.*}"; envfile=".dummy.env"; candidate=".${stack}.env"; if test -f "${candidate}"; then echo "Using env file ${candidate}"; envfile="${candidate}"; fi; (set -a; source $envfile; set +a; docker stack config --compose-file "$1") }
 function stackdeploy() { filename=$(basename -- "$1"); stack="${filename%.*}"; envfile=".dummy.env"; candidate=".${stack}.env"; if test -f "${candidate}"; then echo "Using env file ${candidate}"; envfile="${candidate}"; fi; (set -a; source $envfile; set +a; docker stack deploy --detach=true --compose-file "$1" $stack) }
+function stackexec() {
+  service_name=$1
+  task_id=$(docker service ps -qf "desired-state=running" $service_name | head -1)
+  container_id=$(docker inspect -f '{{.Status.ContainerStatus.ContainerID}}' $task_id)
+  node_id=$(docker inspect -f '{{.NodeID}}' $task_id)
+  node_name=$(docker node ls --filter "id=$node_id" --format "{{.Hostname}}")
+  node_isme=$(docker node ls --filter "id=$node_id" --format "{{.Self}}")
+  echo "$service_name is task $task_id running in container $container_id on node $node_id which is named $node_name (is me: $node_isme)"
+  if [ "$node_isme" = "true" ]; then
+    docker exec -it $container_id "${@:2}"
+  else
+    DOCKER_HOST=ssh://$node_name docker exec -it $container_id "${@:2}"
+  fi
+}
+function _stackexec() {
+  _arguments '1: :($(docker service ls --format "{{.Name}}"))'
+}
+compdef _stackexec stackexec
 
 command -v toilet > /dev/null 2>&1 && print -P "$USER_COLOR"; toilet -f smblock $HOST; print -P "$USER_COLOR"
 
