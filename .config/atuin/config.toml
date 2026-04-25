@@ -20,7 +20,7 @@
 # session_path = "~/.session"
 
 ## date format used, either "us" or "uk"
-# dialect = "us"
+dialect = "uk"
 
 ## default timezone to use when displaying time
 ## either "l", "local" to use the system's current local timezone, or an offset
@@ -49,7 +49,7 @@
 ## which filter mode to use by default
 ## possible values: "global", "host", "session", "session-preload", "directory", "workspace"
 ## consider using search.filters to customize the enablement and order of filter modes
-# filter_mode = "global"
+# filter_mode = "host"
 
 ## With workspace filtering enabled, Atuin will filter for commands executed
 ## in any directory within a git repository tree (default: false).
@@ -62,7 +62,7 @@
 ## which filter mode to use when atuin is invoked from a shell up-key binding
 ## the accepted values are identical to those of "filter_mode"
 ## leave unspecified to use same mode set in "filter_mode"
-# filter_mode_shell_up_key_binding = "global"
+filter_mode_shell_up_key_binding = "host"
 
 ## which search mode to use when atuin is invoked from a shell up-key binding
 ## the accepted values are identical to those of "search_mode"
@@ -71,7 +71,7 @@
 
 ## which style to use
 ## possible values: auto, full, compact
-# style = "auto"
+style = "full"
 
 ## the maximum number of lines the interface should take up
 ## set it to 0 to always go full screen
@@ -91,7 +91,7 @@
 
 ## what to do when the escape key is pressed when searching
 ## possible values: return-original, return-query
-# exit_mode = "return-original"
+exit_mode = "return-query"
 
 ## possible values: emacs, subl
 # word_jump_mode = "emacs"
@@ -133,9 +133,10 @@
 ## start with ^ or end with $, they'll match anywhere in CWD.
 ## For details on the supported regular expression syntax, see
 ## https://docs.rs/regex/latest/regex/#syntax
-# cwd_filter = [
-#   "^/very/secret/area",
-# ]
+cwd_filter = [
+  "scratch",
+  "\\.x"
+]
 
 ## Configure the maximum height of the preview to show.
 ## Useful when you have long scripts in your history that you want to distinguish
@@ -180,7 +181,7 @@ enter_accept = true
 ## keybinding is defined.  If this is set to "emacs", "vim-insert", or
 ## "vim-normal", the startup keymap mode in the Atuin search is forced to be
 ## the specified one.
-# keymap_mode = "auto"
+keymap_mode = "auto"
 
 ## Cursor style in each keymap mode.  If specified, the cursor style is changed
 ## in entering the cursor shape.  Available values are "default" and
@@ -291,7 +292,7 @@ records = true
 ## The port that should be used for TCP on non unix systems
 # tcp_port = 8889
 
-# [theme]
+[theme]
 ## Color theme to use for rendering in the terminal.
 ## There are some built-in themes, including the base theme ("default"),
 ## "autumn" and "marine". You can add your own themes to the "./themes" subdirectory of your
@@ -301,7 +302,7 @@ records = true
 ##    https://ogeon.github.io/docs/palette/master/palette/named/index.html
 ## If you provide a custom theme file, it should be  called "NAME.toml" and the theme below
 ## should be the stem, i.e. `theme = "NAME"` for your chosen NAME.
-# name = "autumn"
+name = "marine"
 
 ## Whether the theme manager should output normal or extra information to help fix themes.
 ## Boolean, true or false. If unset, left up to the theme manager.
@@ -351,7 +352,7 @@ records = true
 ## column fill remaining space. Only one column should have expand = true.
 ##
 ## Default:
-# columns = ["duration", "time", "command"]
+columns = ["duration", "time", "host", "command"]
 ##
 ## Examples:
 ##
